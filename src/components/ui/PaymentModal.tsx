@@ -15,48 +15,54 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const validateAmount = (amount: string): boolean => {
+    const numAmount = parseFloat(amount);
+    return !isNaN(numAmount) && numAmount > 0;
+  };
+
   const handlePayment = async () => {
     setIsProcessing(true);
     setError(null);
     
+    if (!validateAmount(amount)) {
+      setError('Please enter a valid amount greater than 0');
+      setIsProcessing(false);
+      return;
+    }
+
     try {
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
 
+      const numAmount = parseFloat(amount);
+      
       // Create a payment session
-      const response = await fetch('/api/create-checkout-session', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
-          amount: parseFloat(amount) * 100, // Convert to cents
+          amount: Math.round(numAmount * 100), // Convert to cents and ensure it's an integer
           invoiceNumber,
           planTitle: selectedPlan,
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.text();
-        let errorMessage;
-        try {
-          const parsedError = JSON.parse(errorData);
-          errorMessage = parsedError.error || 'Payment failed. Please try again.';
-        } catch {
-          errorMessage = errorData || 'Payment failed. Please try again.';
-        }
-        throw new Error(errorMessage);
+        throw new Error(data.error || 'Payment failed. Please try again.');
       }
 
-      const session = await response.json();
-      
-      if (!session || !session.id) {
+      if (!data.id) {
         throw new Error('Invalid session response from server');
       }
 
       // Redirect to Stripe Checkout
       const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
+        sessionId: data.id,
       });
 
       if (result.error) {
@@ -111,7 +117,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
                   placeholder="0.00"
-                  min="0"
+                  min="0.01"
                   step="0.01"
                 />
               </div>
@@ -128,7 +134,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
             </button>
             <button
               onClick={handlePayment}
-              disabled={isProcessing || !amount}
+              disabled={isProcessing || !validateAmount(amount)}
               className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? 'Processing...' : 'Pay Now'}

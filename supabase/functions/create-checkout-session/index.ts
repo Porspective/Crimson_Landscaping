@@ -25,10 +25,21 @@ serve(async (req) => {
 
     const { amount, invoiceNumber, planTitle } = body;
 
-    // Validate required fields
-    if (!amount || typeof amount !== 'number') {
-      throw new Error('Invalid amount');
+    // Enhanced validation
+    if (!amount || typeof amount !== 'number' || amount <= 0) {
+      throw new Error('Amount must be a positive number');
     }
+
+    if (!Number.isInteger(amount)) {
+      throw new Error('Amount must be provided in cents (integer value)');
+    }
+
+    // Log request data for debugging
+    console.log('Creating checkout session with:', {
+      amount,
+      invoiceNumber,
+      planTitle,
+    });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -57,10 +68,21 @@ serve(async (req) => {
   } catch (error) {
     console.error('Checkout session error:', error);
     
+    // Enhanced error handling
+    let errorMessage = 'Failed to create checkout session';
+    
+    if (error instanceof Error) {
+      // If it's a Stripe error, it will have type property
+      const stripeError = error as any;
+      if (stripeError.type) {
+        errorMessage = `Stripe error: ${stripeError.message}`;
+      } else {
+        errorMessage = error.message;
+      }
+    }
+    
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Failed to create checkout session' 
-      }),
+      JSON.stringify({ error: errorMessage }),
       { 
         status: 400,
         headers: corsHeaders,
