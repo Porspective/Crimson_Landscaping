@@ -22,10 +22,10 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex items-center mb-4">
               <Droplets className="h-8 w-8 text-crimson-500" />
-              <span className="ml-2 text-xl font-bold">Crimson Landscaping</span>
+              <span className="ml-2 text-xl font-bold">Crimson Clean Co</span>
             </div>
             <p className="text-gray-400 mb-4">
-              Professional lawn care and landscaping services for residential and commercial
+              Professional pressure washing and mowing services for residential and commercial
               properties in Oklahoma.
             </p>
             <div className="flex space-x-4">
@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Lawn Maintenance
+                  <ChevronRight className="h-4 w-4 mr-1" /> Driveway Cleaning
                 </Link>
               </li>
               <li>
@@ -106,7 +106,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Landscaping Design
+                  <ChevronRight className="h-4 w-4 mr-1" /> House Washing
                 </Link>
               </li>
               <li>
@@ -114,7 +114,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Mulching & Edging
+                  <ChevronRight className="h-4 w-4 mr-1" /> Deck Cleaning
                 </Link>
               </li>
               <li>
@@ -122,7 +122,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Shrub & Tree Care
+                  <ChevronRight className="h-4 w-4 mr-1" /> Trash Can Cleaning
                 </Link>
               </li>
               <li>
@@ -130,7 +130,15 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Seasonal Cleanup
+                  <ChevronRight className="h-4 w-4 mr-1" /> Commercial Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
+                >
+                  <ChevronRight className="h-4 w-4 mr-1" /> Lawn Mowing
                 </Link>
               </li>
             </ul>
@@ -156,10 +164,10 @@ const Footer: React.FC = () => {
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-crimson-500 mr-2" />
                 <a
-                  href="mailto:Crimson.Landscaping.Co@gmail.com"
+                  href="mailto:crimson.clean.com@gmail.com"
                   className="text-gray-400 hover:text-crimson-500 transition-colors"
                 >
-                  Crimson.Landscaping.Co@gmail.com
+                  crimson.clean.com@gmail.com
                 </a>
               </li>
               <li className="flex items-start">
@@ -178,7 +186,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm">
-          <p>© {currentYear} Crimson Landscaping. All rights reserved.</p>
+          <p>© {currentYear} Crimson Clean Co. All rights reserved.</p>
         </div>
       </div>
     </footer>
