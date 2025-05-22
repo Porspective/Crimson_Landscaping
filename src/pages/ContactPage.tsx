@@ -29,7 +29,20 @@ const ContactPage: React.FC = () => {
               <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg h-full">
                 <h2 className="text-2xl font-bold mb-6 text-crimson-900">Get In Touch</h2>
                 
-                <div className="space-y-6">                  
+                <div className="space-y-6">
+                  <div className="flex items-start">
+                    <Phone className="h-6 w-6 text-crimson-700 mr-4 mt-1 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
+                      <a 
+                        href="tel:+14054972081" 
+                        className="text-gray-700 hover:text-crimson-700 transition-colors"
+                      >
+                        (405) 497-2081
+                      </a>
+                    </div>
+                  </div>
+                  
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 text-crimson-700 mr-4 mt-1 flex-shrink-0" />
                     <div>
