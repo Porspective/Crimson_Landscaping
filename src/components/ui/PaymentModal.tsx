@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('your_publishable_key');
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -8,6 +11,46 @@ interface PaymentModalProps {
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
+  const [amount, setAmount] = useState('');
+  const [invoiceNumber, setInvoiceNumber] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error('Stripe failed to load');
+
+      // Create a payment session
+      const response = await fetch('https://bolt.new/setup/stripe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: parseFloat(amount) * 100, // Convert to cents
+          invoiceNumber,
+        }),
+      });
+
+      const session = await response.json();
+      
+      // Redirect to Stripe Checkout
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Payment failed. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
@@ -24,6 +67,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
               </label>
               <input
                 type="text"
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
                 placeholder="Enter invoice number"
               />
@@ -37,27 +82,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
                 <span className="absolute left-3 top-2 text-gray-500">$</span>
                 <input
                   type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
                   placeholder="0.00"
                   min="0"
                   step="0.01"
                 />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Payment Method
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                <button className="p-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-crimson-500">
-                  <img src="./card-icon.png" alt="Credit Card" className="h-8 w-8 mx-auto mb-2" />
-                  <span className="block text-sm text-gray-700">Credit Card</span>
-                </button>
-                <button className="p-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-crimson-500">
-                  <img src="./bank-icon.png" alt="Bank Transfer" className="h-8 w-8 mx-auto mb-2" />
-                  <span className="block text-sm text-gray-700">Bank Transfer</span>
-                </button>
               </div>
             </div>
           </div>
@@ -66,13 +97,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
             <button
               onClick={onClose}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isProcessing}
             >
               Cancel
             </button>
             <button
-              className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500"
+              onClick={handlePayment}
+              disabled={isProcessing || !amount}
+              className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Continue to Payment
+              {isProcessing ? 'Processing...' : 'Pay Now'}
             </button>
           </div>
           
