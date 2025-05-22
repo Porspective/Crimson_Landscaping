@@ -7,10 +7,17 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  base: './',
   build: {
-    outDir: 'dist',
+    outDir: '.',
     assetsDir: 'assets',
-    sourcemap: true,
-    copyPublicDir: true
+    emptyOutDir: false,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
+      }
+    }
   }
 });
