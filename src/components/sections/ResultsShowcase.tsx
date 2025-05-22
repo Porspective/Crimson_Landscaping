@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BeforeAfter from '../ui/BeforeAfter';
+import PaymentModal from '../ui/PaymentModal';
 
 const ResultsShowcase: React.FC = () => {
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
   const results = [
     {
       title: 'Driveway Transformation',
@@ -41,11 +44,24 @@ const ResultsShowcase: React.FC = () => {
           <p className="text-lg text-gray-700 mb-6">
             Ready to see these amazing results on your property?
           </p>
-          <a href="/contact" className="btn-primary">
-            Get Your Free Quote Today
-          </a>
+          <div className="space-x-4">
+            <a href="/contact" className="btn-primary">
+              Get Your Free Quote Today
+            </a>
+            <button 
+              onClick={() => setIsPaymentModalOpen(true)}
+              className="btn-secondary"
+            >
+              Make a Payment
+            </button>
+          </div>
         </div>
       </div>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+      />
     </section>
   );
 };
