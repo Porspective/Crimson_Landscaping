@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
@@ -9,6 +9,12 @@ import NotFoundPage from './pages/NotFoundPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
