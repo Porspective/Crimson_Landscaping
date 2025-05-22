@@ -40,7 +40,7 @@ const Header: React.FC = () => {
       <div className="container-custom flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="C.png" alt="Crimson Clean Co Logo" className="h-8 w-8" />
+          <img src="./C.png" alt="Crimson Clean Co Logo" className="h-8 w-8" />
           <div className="ml-2">
             <span className="text-xl font-bold text-crimson-900">Crimson Clean Co</span>
             <p className="text-xs text-gray-600">Pressure Washing & Mowing Services</p>
