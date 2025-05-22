@@ -17,7 +17,6 @@ serve(async (req) => {
   }
 
   try {
-    // Validate request body
     const body = await req.json().catch(() => null);
     if (!body) {
       throw new Error('Invalid request body');
@@ -34,13 +33,7 @@ serve(async (req) => {
       throw new Error('Amount must be provided in cents (integer value)');
     }
 
-    // Log request data for debugging
-    console.log('Creating checkout session with:', {
-      amount,
-      invoiceNumber,
-      planTitle,
-    });
-
+    // Create the checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -63,30 +56,19 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ id: session.id }),
-      { headers: corsHeaders },
+      { headers: corsHeaders }
     );
   } catch (error) {
     console.error('Checkout session error:', error);
     
-    // Enhanced error handling
-    let errorMessage = 'Failed to create checkout session';
-    
-    if (error instanceof Error) {
-      // If it's a Stripe error, it will have type property
-      const stripeError = error as any;
-      if (stripeError.type) {
-        errorMessage = `Stripe error: ${stripeError.message}`;
-      } else {
-        errorMessage = error.message;
-      }
-    }
-    
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'Failed to create checkout session' 
+      }),
       { 
         status: 400,
         headers: corsHeaders,
-      },
+      }
     );
   }
 });
