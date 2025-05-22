@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, CreditCard } from 'lucide-react';
+import { Menu, X, PhoneCall, CreditCard } from 'lucide-react';
 import PaymentModal from '../ui/PaymentModal';
 
 const Header: React.FC = () => {
@@ -42,10 +42,10 @@ const Header: React.FC = () => {
         <div className="container-custom flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img src="./C.png" alt="Crimson Landscaping Logo" className="h-8 w-8" />
+            <img src="./CL.png" alt="Crimson Clean Co Logo" className="h-8 w-8" />
             <div className="ml-2">
-              <span className="text-xl font-bold text-crimson-900">Crimson Landscaping</span>
-              <p className="text-xs text-gray-600">Professional Lawn Care & Landscaping</p>
+              <span className="text-xl font-bold text-crimson-900">Crimson Clean Co</span>
+              <p className="text-xs text-gray-600">Pressure Washing & Mowing Services</p>
             </div>
           </Link>
 
@@ -67,6 +67,10 @@ const Header: React.FC = () => {
               <CreditCard className="h-4 w-4 mr-2" />
               Pay Now
             </button>
+            <a href="tel:+14054972081" className="flex items-center text-crimson-700 font-medium">
+              <PhoneCall className="h-4 w-4 mr-2" />
+              (405) 497-2081
+            </a>
           </nav>
 
           {/* Quote Button (Desktop) */}
@@ -134,6 +138,13 @@ const Header: React.FC = () => {
                 <CreditCard className="h-4 w-4 mr-2" />
                 Pay Now
               </button>
+              <a
+                href="tel:+14054972081"
+                className="flex items-center py-2 px-4 text-crimson-700 font-medium"
+              >
+                <PhoneCall className="h-4 w-4 mr-2" />
+                (405) 497-2081
+              </a>
               <Link
                 to="/contact"
                 className="btn-primary w-full text-center"
