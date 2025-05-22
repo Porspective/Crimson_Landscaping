@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu, X, CreditCard } from 'lucide-react';
-import PaymentModal from '../components/ui/PaymentModal';
+import PaymentModal from '../ui/PaymentModal';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
