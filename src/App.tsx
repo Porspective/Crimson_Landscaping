@@ -17,8 +17,8 @@ function App() {
 
   return (
     <Routes>
-      {/* Redirect GitHub Pages base path to actual homepage */}
-      <Route path="/Crimson_Landscaping" element={<Navigate to="/" replace />} />
+      {/* Redirect GitHub Pages root path to "/" */}
+      <Route path="/Crimson_Landscaping/*" element={<Navigate to="/" replace />} />
 
       {/* Main layout with nested routes */}
       <Route path="/" element={<Layout />}>
@@ -33,3 +33,4 @@ function App() {
 }
 
 export default App;
+
