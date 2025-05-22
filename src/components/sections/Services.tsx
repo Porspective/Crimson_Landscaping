@@ -6,10 +6,10 @@ import { Droplets, Home, LayoutGrid, CheckCircle, Car, Trash2, Wind } from 'luci
 const Services: React.FC = () => {
   const services = [
     {
-      title: 'Driveway Cleaning',
-      description: 'Remove stubborn stains, oil spots, and grime from your driveway with our professional pressure washing service.',
-      icon: <Car className="h-5 w-5" />,
-      imageUrl: '/driveway.png'
+      title: 'Lawn Mowing',
+      description: 'Keep your lawn looking perfectly manicured with our professional mowing service.',
+      icon: <Wind className="h-5 w-5" />,
+      imageUrl: 'https://images.pexels.com/photos/589/garden-grass-meadow-green.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       title: 'House Washing',
@@ -36,10 +36,10 @@ const Services: React.FC = () => {
       imageUrl: '/commercial.png'
     },
     {
-      title: 'Lawn Mowing',
-      description: 'Keep your lawn looking perfectly manicured with our professional mowing service.',
-      icon: <Wind className="h-5 w-5" />,
-      imageUrl: 'https://images.pexels.com/photos/589/garden-grass-meadow-green.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      title: 'Driveway Cleaning',
+      description: 'Remove stubborn stains, oil spots, and grime from your driveway with our professional pressure washing service.',
+      icon: <Car className="h-5 w-5" />,
+      imageUrl: '/driveway.png'
     }
   ];
 
