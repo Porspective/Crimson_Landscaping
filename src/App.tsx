@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
@@ -17,6 +17,10 @@ function App() {
 
   return (
     <Routes>
+      {/* Redirect GitHub Pages base path to actual homepage */}
+      <Route path="/Crimson_Landscaping" element={<Navigate to="/" replace />} />
+
+      {/* Main layout with nested routes */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="services" element={<ServicesPage />} />
