@@ -50,7 +50,7 @@ const WhyChooseUs: React.FC = () => {
           <div className="grid md:grid-cols-2">
             <div 
               className="bg-cover bg-center min-h-[300px]"
-              style={{ backgroundImage: "url('https://images.pexels.com/photos/5711255/pexels-photo-5711255.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')" }}
+              style={{ backgroundImage: "url('https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')" }}
             ></div>
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
