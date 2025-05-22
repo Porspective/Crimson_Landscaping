@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, PhoneCall, CreditCard } from 'lucide-react';
+import { Menu, X, CreditCard } from 'lucide-react';
 import PaymentModal from '../ui/PaymentModal';
 
 const Header: React.FC = () => {
@@ -67,10 +67,6 @@ const Header: React.FC = () => {
               <CreditCard className="h-4 w-4 mr-2" />
               Pay Now
             </button>
-            <a href="tel:+14054972081" className="flex items-center text-crimson-700 font-medium">
-              <PhoneCall className="h-4 w-4 mr-2" />
-              (405) 497-2081
-            </a>
           </nav>
 
           {/* Quote Button (Desktop) */}
@@ -138,13 +134,6 @@ const Header: React.FC = () => {
                 <CreditCard className="h-4 w-4 mr-2" />
                 Pay Now
               </button>
-              <a
-                href="tel:+14054972081"
-                className="flex items-center py-2 px-4 text-crimson-700 font-medium"
-              >
-                <PhoneCall className="h-4 w-4 mr-2" />
-                (405) 497-2081
-              </a>
               <Link
                 to="/contact"
                 className="btn-primary w-full text-center"

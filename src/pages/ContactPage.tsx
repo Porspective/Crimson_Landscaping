@@ -29,29 +29,16 @@ const ContactPage: React.FC = () => {
               <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg h-full">
                 <h2 className="text-2xl font-bold mb-6 text-crimson-900">Get In Touch</h2>
                 
-                <div className="space-y-6">
-                  <div className="flex items-start">
-                    <Phone className="h-6 w-6 text-crimson-700 mr-4 mt-1 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
-                      <a 
-                        href="tel:+14054972081" 
-                        className="text-gray-700 hover:text-crimson-700 transition-colors"
-                      >
-                        (405) 497-2081
-                      </a>
-                    </div>
-                  </div>
-                  
+                <div className="space-y-6">                  
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 text-crimson-700 mr-4 mt-1 flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
                       <a 
-                        href="mailto:Crimson.Landscaping.Co@gmail.com" 
+                        href="mailto:crimson.clean.com@gmail.com" 
                         className="text-gray-700 hover:text-crimson-700 transition-colors"
                       >
-                        Crimson.Landscaping.Co@gmail.com
+                        crimson.clean.com@gmail.com
                       </a>
                     </div>
                   </div>
@@ -106,7 +93,7 @@ const ContactPage: React.FC = () => {
           <div className="mt-12 bg-white p-4 rounded-lg shadow-lg">
             <div className="aspect-w-16 aspect-h-9">
               <iframe 
-                title="Crimson Landscaping Location"
+                title="Crimson Clean Co Location"
                 className="w-full h-[400px] rounded-md"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51859.89194624472!2d-97.47011336874998!3d35.22267449999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87b26a5d777d3d27%3A0xe6d346469b75c769!2sNorman%2C%20OK%2073069!5e0!3m2!1sen!2sus!4v1710861851044!5m2!1sen!2sus"
                 loading="lazy"
@@ -135,16 +122,16 @@ const ContactPage: React.FC = () => {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">Are your landscaping methods eco-friendly?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">Are your cleaning methods safe?</h3>
               <p className="text-gray-700">
-                Yes, we use environmentally responsible practices and products that are safe for your family, pets, and the environment while maintaining the health and beauty of your landscape.
+                Yes, we use appropriate pressure levels and eco-friendly cleaning solutions that are safe for your family, pets, and the environment while maintaining the cleanliness of your property.
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">How often should I schedule lawn maintenance?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">How often should I schedule services?</h3>
               <p className="text-gray-700">
-                For most properties, we recommend weekly or bi-weekly maintenance during the growing season. We can create a custom schedule based on your lawn's specific needs.
+                For most properties, we recommend regular maintenance based on your specific needs and environmental factors. We can create a custom schedule that works for you.
               </p>
             </div>
             
