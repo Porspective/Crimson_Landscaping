@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Droplets,
   Instagram,
   Facebook,
   MapPin,
@@ -21,7 +20,7 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center mb-4">
-              <Droplets className="h-8 w-8 text-crimson-500" />
+              <img src="./CL.png" alt="Crimson Clean Co Logo" className="h-8 w-8" />
               <span className="ml-2 text-xl font-bold">Crimson Clean Co</span>
             </div>
             <p className="text-gray-400 mb-4">
