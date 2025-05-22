@@ -1,8 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import ContactForm from '../components/ui/ContactForm';
+import ServiceSubscriptionCard from '../components/ui/ServiceSubscriptionCard';
+import PaymentModal from '../components/ui/PaymentModal';
 
 const ContactPage: React.FC = () => {
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+
+  const subscriptionPlans = [
+    {
+      title: 'Basic Mowing',
+      price: 49,
+      frequency: 'visit',
+      features: [
+        'Front and back yard mowing',
+        'Edge trimming',
+        'Cleanup included',
+        'Pay per service',
+        'Flexible scheduling'
+      ]
+    },
+    {
+      title: 'Monthly Maintenance',
+      price: 159,
+      frequency: 'month',
+      features: [
+        'Bi-weekly mowing service',
+        'Edge trimming',
+        'Blowing and cleanup',
+        'Priority scheduling',
+        'Seasonal adjustments'
+      ],
+      popular: true
+    },
+    {
+      title: 'Premium Care',
+      price: 259,
+      frequency: 'month',
+      features: [
+        'Weekly mowing service',
+        'Edge trimming',
+        'Blowing and cleanup',
+        'Priority scheduling',
+        'Fertilization included',
+        'Seasonal adjustments'
+      ]
+    }
+  ];
+
+  const handleSubscribe = (planTitle: string) => {
+    setSelectedPlan(planTitle);
+    setIsPaymentModalOpen(true);
+  };
+
   return (
     <div>
       {/* Contact Hero */}
@@ -16,8 +67,35 @@ const ContactPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Contact Information & Form */}
+      {/* Subscription Plans */}
       <section className="section bg-gray-50">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Lawn Care Plans</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Choose the perfect lawn care plan for your needs. All plans include professional 
+              service with our satisfaction guarantee.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {subscriptionPlans.map((plan) => (
+              <ServiceSubscriptionCard
+                key={plan.title}
+                title={plan.title}
+                price={plan.price}
+                frequency={plan.frequency}
+                features={plan.features}
+                popular={plan.popular}
+                onSubscribe={() => handleSubscribe(plan.title)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Information & Form */}
+      <section className="section bg-white">
         <div className="container-custom">
           <div className="grid md:grid-cols-3 gap-8">
             {/* Contact Information */}
@@ -104,7 +182,7 @@ const ContactPage: React.FC = () => {
       </section>
       
       {/* FAQ Section */}
-      <section className="section bg-white">
+      <section className="section bg-gray-50">
         <div className="container-custom">
           <div className="section-title">
             <h2>Frequently Asked Questions</h2>
@@ -114,42 +192,42 @@ const ContactPage: React.FC = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">How much does pressure washing cost?</h3>
               <p className="text-gray-700">
                 Our pricing depends on the size of the area to be cleaned and the level of cleaning required. We provide free, no-obligation quotes so you'll know exactly what to expect before we begin work.
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">Are your cleaning methods safe for my property?</h3>
               <p className="text-gray-700">
                 Yes, we use appropriate pressure levels and eco-friendly cleaning solutions for each surface. Our technicians are trained to clean effectively without causing damage.
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">How often should I have my property pressure washed?</h3>
               <p className="text-gray-700">
                 We recommend annual cleaning for most surfaces to prevent buildup of dirt, mold, and mildew. However, this can vary based on your property's exposure to the elements.
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">Do you offer recurring service plans?</h3>
               <p className="text-gray-700">
                 Yes, we offer scheduled maintenance plans for both residential and commercial properties. Contact us to discuss a custom plan that meets your needs.
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">What areas do you serve?</h3>
               <p className="text-gray-700">
                 We serve Oklahoma City and all surrounding areas including Edmond, Norman, Moore, Yukon, Mustang, Midwest City, and Del City.
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">What about insurance?</h3>
               <p className="text-gray-700">
                 We are currently in the process of obtaining our insurance coverage to better serve and protect our customers.
@@ -158,6 +236,11 @@ const ContactPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+      />
     </div>
   );
 };
