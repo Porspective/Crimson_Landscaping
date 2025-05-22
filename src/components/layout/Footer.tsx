@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
             </div>
             <p className="text-gray-400 mb-4">
               Professional pressure washing and mowing services for residential and commercial
-              properties in Oklahoma.
+              properties in Norman.
             </p>
             <div className="flex space-x-4">
               <a
@@ -141,16 +141,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-crimson-500 mr-2 mt-0.5" />
-                <span className="text-gray-400">Oklahoma City, OK 73142</span>
-              </li>
-              <li className="flex items-center">
-                <Phone className="h-5 w-5 text-crimson-500 mr-2" />
-                <a
-                  href="tel:+14054972081"
-                  className="text-gray-400 hover:text-crimson-500 transition-colors"
-                >
-                  (405) 497-2081
-                </a>
+                <span className="text-gray-400">Norman, OK 73069</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-crimson-500 mr-2" />
