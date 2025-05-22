@@ -20,8 +20,8 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center mb-4">
-              <img src="./CL.png" alt="Crimson Clean Co Logo" className="h-16 w-16" />
-              <span className="ml-2 text-xl font-bold">Crimson Clean Co</span>
+              <img src="./CL.png" alt="Crimson Landscaping Logo" className="h-16 w-16" />
+              <span className="ml-2 text-xl font-bold">Crimson Landscaping</span>
             </div>
             <p className="text-gray-400 mb-4">
               Professional pressure washing and mowing services for residential and commercial
@@ -177,7 +177,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm">
-          <p>© {currentYear} Crimson Clean Co. All rights reserved.</p>
+          <p>© {currentYear} Crimson Landscaping. All rights reserved.</p>
         </div>
       </div>
     </footer>
