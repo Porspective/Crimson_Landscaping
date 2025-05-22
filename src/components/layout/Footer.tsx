@@ -156,10 +156,10 @@ const Footer: React.FC = () => {
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-crimson-500 mr-2" />
                 <a
-                  href="mailto:crimson.clean.com@gmail.com"
+                  href="mailto:Crimson.Landscaping.Co@gmail.com"
                   className="text-gray-400 hover:text-crimson-500 transition-colors"
                 >
-                  crimson.clean.com@gmail.com
+                  Crimson.Landscaping.Co@gmail.com
                 </a>
               </li>
               <li className="flex items-start">

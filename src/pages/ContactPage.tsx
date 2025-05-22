@@ -122,10 +122,10 @@ const ContactPage: React.FC = () => {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
                       <a 
-                        href="mailto:crimson.clean.com@gmail.com" 
+                        href="mailto:Crimson.Landscaping.Co@gmail.com" 
                         className="text-gray-700 hover:text-crimson-700 transition-colors"
                       >
-                        crimson.clean.com@gmail.com
+                        Crimson.Landscaping.Co@gmail.com
                       </a>
                     </div>
                   </div>
@@ -151,13 +151,6 @@ const ContactPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
-                <div className="mt-8 p-4 bg-gray-50 rounded-md">
-                  <h3 className="font-semibold text-gray-900 mb-2">Service Areas</h3>
-                  <p className="text-gray-700">
-                    Oklahoma City • Edmond • Norman • Moore • Yukon • Mustang • Midwest City • Del City • And surrounding areas
-                  </p>
-                </div>
 
                 <div className="mt-8">
                   <button
@@ -166,6 +159,13 @@ const ContactPage: React.FC = () => {
                   >
                     Make a Payment
                   </button>
+                </div>
+                
+                <div className="mt-8 p-4 bg-gray-50 rounded-md">
+                  <h3 className="font-semibold text-gray-900 mb-2">Service Areas</h3>
+                  <p className="text-gray-700">
+                    Oklahoma City • Edmond • Norman • Moore • Yukon • Mustang • Midwest City • Del City • And surrounding areas
+                  </p>
                 </div>
               </div>
             </div>
