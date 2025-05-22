@@ -5,13 +5,13 @@ const ResultsShowcase: React.FC = () => {
   const results = [
     {
       title: 'Driveway Transformation',
-      beforeImage: 'https://images.pexels.com/photos/6195097/pexels-photo-6195097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      afterImage: 'https://images.pexels.com/photos/6195123/pexels-photo-6195123.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      beforeImage: '',
+      afterImage: ''
     },
     {
       title: 'Deck Restoration',
-      beforeImage: 'https://images.pexels.com/photos/5816323/pexels-photo-5816323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      afterImage: 'https://images.pexels.com/photos/5997992/pexels-photo-5997992.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      beforeImage: '',
+      afterImage: ''
     }
   ];
 
