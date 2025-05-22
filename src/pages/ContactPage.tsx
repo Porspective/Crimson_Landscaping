@@ -1,58 +1,11 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import ContactForm from '../components/ui/ContactForm';
-import ServiceSubscriptionCard from '../components/ui/ServiceSubscriptionCard';
 import PaymentModal from '../components/ui/PaymentModal';
 
 const ContactPage: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-
-  const subscriptionPlans = [
-    {
-      title: 'Basic Mowing',
-      price: 49,
-      frequency: 'visit',
-      features: [
-        'Front and back yard mowing',
-        'Edge trimming',
-        'Cleanup included',
-        'Pay per service',
-        'Flexible scheduling'
-      ]
-    },
-    {
-      title: 'Monthly Maintenance',
-      price: 159,
-      frequency: 'month',
-      features: [
-        'Bi-weekly mowing service',
-        'Edge trimming',
-        'Blowing and cleanup',
-        'Priority scheduling',
-        'Seasonal adjustments'
-      ],
-      popular: true
-    },
-    {
-      title: 'Premium Care',
-      price: 259,
-      frequency: 'month',
-      features: [
-        'Weekly mowing service',
-        'Edge trimming',
-        'Blowing and cleanup',
-        'Priority scheduling',
-        'Fertilization included',
-        'Seasonal adjustments'
-      ]
-    }
-  ];
-
-  const handleSubscribe = (planTitle: string) => {
-    setSelectedPlan(planTitle);
-    setIsPaymentModalOpen(true);
-  };
 
   return (
     <div>
@@ -64,33 +17,6 @@ const ContactPage: React.FC = () => {
             Ready to transform your property? Get in touch for a free quote or 
             to learn more about our services.
           </p>
-        </div>
-      </section>
-
-      {/* Subscription Plans */}
-      <section className="section bg-gray-50">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Lawn Care Plans</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Choose the perfect lawn care plan for your needs. All plans include professional 
-              service with our satisfaction guarantee.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {subscriptionPlans.map((plan) => (
-              <ServiceSubscriptionCard
-                key={plan.title}
-                title={plan.title}
-                price={plan.price}
-                frequency={plan.frequency}
-                features={plan.features}
-                popular={plan.popular}
-                onSubscribe={() => handleSubscribe(plan.title)}
-              />
-            ))}
-          </div>
         </div>
       </section>
 
@@ -134,9 +60,9 @@ const ContactPage: React.FC = () => {
                     <MapPin className="h-6 w-6 text-crimson-700 mr-4 mt-1 flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Location</h3>
-                      <p className="text-gray-700">Oklahoma City, OK 73142</p>
+                      <p className="text-gray-700">Norman, OK 73069</p>
                       <p className="text-gray-700 mt-1">
-                        Serving all of Oklahoma City and surrounding areas
+                        Serving Norman and surrounding areas
                       </p>
                     </div>
                   </div>
@@ -164,7 +90,7 @@ const ContactPage: React.FC = () => {
                 <div className="mt-8 p-4 bg-gray-50 rounded-md">
                   <h3 className="font-semibold text-gray-900 mb-2">Service Areas</h3>
                   <p className="text-gray-700">
-                    Oklahoma City • Edmond • Norman • Moore • Yukon • Mustang • Midwest City • Del City • And surrounding areas
+                    Norman • Moore • Noble • Goldsby • Newcastle • And surrounding areas
                   </p>
                 </div>
               </div>
@@ -180,9 +106,9 @@ const ContactPage: React.FC = () => {
           <div className="mt-12 bg-white p-4 rounded-lg shadow-lg">
             <div className="aspect-w-16 aspect-h-9">
               <iframe 
-                title="Crimson Clean Co Location"
+                title="Crimson Landscaping Location"
                 className="w-full h-[400px] rounded-md"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d103908.86437408654!2d-97.65611080673053!3d35.5390528210484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87ad8a547ef8d281%3A0x33a21274d14f644d!2sOklahoma%20City%2C%20OK!5e0!3m2!1sen!2sus!4v1623252504621!5m2!1sen!2sus" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51859.89194624472!2d-97.47011336874998!3d35.22267449999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87b26a5d777d3d27%3A0xe6d346469b75c769!2sNorman%2C%20OK%2073069!5e0!3m2!1sen!2sus!4v1710861851044!5m2!1sen!2sus"
                 loading="lazy"
               ></iframe>
             </div>
@@ -202,23 +128,23 @@ const ContactPage: React.FC = () => {
           
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">How much does pressure washing cost?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">How much do your services cost?</h3>
               <p className="text-gray-700">
-                Our pricing depends on the size of the area to be cleaned and the level of cleaning required. We provide free, no-obligation quotes so you'll know exactly what to expect before we begin work.
+                Our pricing depends on the size of your property and the services required. We provide free, no-obligation quotes so you'll know exactly what to expect before we begin work.
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">Are your cleaning methods safe for my property?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">Are your landscaping methods eco-friendly?</h3>
               <p className="text-gray-700">
-                Yes, we use appropriate pressure levels and eco-friendly cleaning solutions for each surface. Our technicians are trained to clean effectively without causing damage.
+                Yes, we use environmentally responsible practices and products that are safe for your family, pets, and the environment while maintaining the health and beauty of your landscape.
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">How often should I have my property pressure washed?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">How often should I schedule lawn maintenance?</h3>
               <p className="text-gray-700">
-                We recommend annual cleaning for most surfaces to prevent buildup of dirt, mold, and mildew. However, this can vary based on your property's exposure to the elements.
+                For most properties, we recommend weekly or bi-weekly maintenance during the growing season. We can create a custom schedule based on your lawn's specific needs.
               </p>
             </div>
             
@@ -232,7 +158,7 @@ const ContactPage: React.FC = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-3 text-crimson-900">What areas do you serve?</h3>
               <p className="text-gray-700">
-                We serve Oklahoma City and all surrounding areas including Edmond, Norman, Moore, Yukon, Mustang, Midwest City, and Del City.
+                We serve Norman and all surrounding areas including Moore, Noble, Goldsby, and Newcastle.
               </p>
             </div>
             
