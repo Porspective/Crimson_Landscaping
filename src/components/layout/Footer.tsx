@@ -22,10 +22,10 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex items-center mb-4">
               <Droplets className="h-8 w-8 text-crimson-500" />
-              <span className="ml-2 text-xl font-bold">Crimson Clean Co</span>
+              <span className="ml-2 text-xl font-bold">Crimson Landscaping</span>
             </div>
             <p className="text-gray-400 mb-4">
-              Professional pressure washing and mowing services for residential and commercial
+              Professional lawn care and landscaping services for residential and commercial
               properties in Oklahoma.
             </p>
             <div className="flex space-x-4">
@@ -153,6 +153,15 @@ const Footer: React.FC = () => {
                 <span className="text-gray-400">Norman, OK 73069</span>
               </li>
               <li className="flex items-center">
+                <Phone className="h-5 w-5 text-crimson-500 mr-2" />
+                <a
+                  href="tel:+14054972081"
+                  className="text-gray-400 hover:text-crimson-500 transition-colors"
+                >
+                  (405) 497-2081
+                </a>
+              </li>
+              <li className="flex items-center">
                 <Mail className="h-5 w-5 text-crimson-500 mr-2" />
                 <a
                   href="mailto:crimson.clean.com@gmail.com"
@@ -177,7 +186,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm">
-          <p>© {currentYear} Crimson Clean Co. All rights reserved.</p>
+          <p>© {currentYear} Crimson Landscaping. All rights reserved.</p>
         </div>
       </div>
     </footer>
