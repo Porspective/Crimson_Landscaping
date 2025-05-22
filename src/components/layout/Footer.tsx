@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
+  Droplets,
   Instagram,
   Facebook,
   MapPin,
@@ -20,11 +21,11 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center mb-4">
-              <img src="./CL.png" alt="Crimson Landscaping Logo" className="h-8 w-8" />
-              <span className="ml-2 text-xl font-bold">Crimson Landscaping</span>
+              <Droplets className="h-8 w-8 text-crimson-500" />
+              <span className="ml-2 text-xl font-bold">Crimson Clean Co</span>
             </div>
             <p className="text-gray-400 mb-4">
-              Professional lawn care and landscaping services for residential and commercial
+              Professional pressure washing and mowing services for residential and commercial
               properties in Oklahoma.
             </p>
             <div className="flex space-x-4">
@@ -121,14 +122,6 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Trash Can Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
-                >
                   <ChevronRight className="h-4 w-4 mr-1" /> Commercial Cleaning
                 </Link>
               </li>
@@ -149,7 +142,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-crimson-500 mr-2 mt-0.5" />
-                <span className="text-gray-400">Norman, OK 73069</span>
+                <span className="text-gray-400">Oklahoma City, OK 73142</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-crimson-500 mr-2" />
@@ -185,7 +178,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm">
-          <p>© {currentYear} Crimson Landscaping. All rights reserved.</p>
+          <p>© {currentYear} Crimson Clean Co. All rights reserved.</p>
         </div>
       </div>
     </footer>
