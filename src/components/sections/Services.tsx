@@ -9,31 +9,31 @@ const Services: React.FC = () => {
       title: 'Driveway Cleaning',
       description: 'Remove stubborn stains, oil spots, and grime from your driveway with our professional pressure washing service.',
       icon: <Car className="h-5 w-5" />,
-      imageUrl: 'driveway.png'
+      imageUrl: '/driveway.png'
     },
     {
       title: 'House Washing',
       description: 'Our soft wash house cleaning service safely removes dirt, grime, mold, mildew, and algae from your home\'s exterior without damaging the surfaces.',
       icon: <Home className="h-5 w-5" />,
-      imageUrl: 'house.png'
+      imageUrl: '/house.png'
     },
     {
       title: 'Deck Cleaning',
       description: 'Revitalize your outdoor living space with our specialized deck cleaning service.',
       icon: <LayoutGrid className="h-5 w-5" />,
-      imageUrl: 'deck.png'
+      imageUrl: '/deck.png'
     },
     {
       title: 'Trash Can Cleaning',
       description: 'Eliminate odors and bacteria with our thorough trash can cleaning service.',
       icon: <Trash2 className="h-5 w-5" />,
-      imageUrl: 'trashcan1.png'
+      imageUrl: '/trashcan1.png'
     },
     {
       title: 'Commercial Cleaning',
       description: 'Maintain your business\'s professional appearance with our commercial pressure washing services.',
       icon: <Droplets className="h-5 w-5" />,
-      imageUrl: 'commercial.png'
+      imageUrl: '/commercial.png'
     },
     {
       title: 'Lawn Mowing',

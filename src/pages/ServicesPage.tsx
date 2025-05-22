@@ -62,7 +62,7 @@ const ServicesPage: React.FC = () => {
         'Prevents weed growth in cracks',
         'Prepares surface for sealing'
       ],
-      imageUrl: 'driveway.png'
+      imageUrl: '/driveway.png'
     },
     {
       title: 'House Washing',
@@ -76,7 +76,7 @@ const ServicesPage: React.FC = () => {
         'Prepares surfaces for painting',
         'Maintains property value'
       ],
-      imageUrl: 'house.png'
+      imageUrl: '/house.png'
     },
     {
       title: 'Deck Cleaning',
@@ -90,7 +90,7 @@ const ServicesPage: React.FC = () => {
         'Prepares wood for staining or sealing',
         'Improves outdoor entertainment areas'
       ],
-      imageUrl: 'deck.png'
+      imageUrl: '/deck.png'
     },
     {
       title: 'Trash Can Cleaning',
@@ -104,7 +104,7 @@ const ServicesPage: React.FC = () => {
         'Convenient scheduled service options',
         'Extends the life of your trash cans'
       ],
-      imageUrl: 'trashcan1.png'
+      imageUrl: '/trashcan1.png'
     },
     {
       title: 'Commercial Cleaning',
@@ -118,7 +118,7 @@ const ServicesPage: React.FC = () => {
         'Complies with health regulations',
         'Scheduled maintenance plans available'
       ],
-      imageUrl: 'commercial.png'
+      imageUrl: '/commercial.png'
     },
     {
       title: 'Lawn Mowing',
