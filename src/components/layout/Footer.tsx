@@ -22,10 +22,10 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex items-center mb-4">
               <Droplets className="h-8 w-8 text-crimson-500" />
-              <span className="ml-2 text-xl font-bold">Crimson Clean Co</span>
+              <span className="ml-2 text-xl font-bold">Crimson Landscaping</span>
             </div>
             <p className="text-gray-400 mb-4">
-              Professional pressure washing and mowing services for residential and commercial
+              Professional lawn care and landscaping services for residential and commercial
               properties in Oklahoma.
             </p>
             <div className="flex space-x-4">
@@ -98,39 +98,39 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Driveway Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
-                >
-                  <ChevronRight className="h-4 w-4 mr-1" /> House Washing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
-                >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Deck Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
-                >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Commercial Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
-                >
                   <ChevronRight className="h-4 w-4 mr-1" /> Lawn Mowing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
+                >
+                  <ChevronRight className="h-4 w-4 mr-1" /> Landscaping
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
+                >
+                  <ChevronRight className="h-4 w-4 mr-1" /> Garden Maintenance
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
+                >
+                  <ChevronRight className="h-4 w-4 mr-1" /> Tree Services
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
+                >
+                  <ChevronRight className="h-4 w-4 mr-1" /> Commercial Services
                 </Link>
               </li>
             </ul>
@@ -178,7 +178,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm">
-          <p>© {currentYear} Crimson Clean Co. All rights reserved.</p>
+          <p>© {currentYear} Crimson Landscaping. All rights reserved.</p>
         </div>
       </div>
     </footer>
