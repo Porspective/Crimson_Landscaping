@@ -13,9 +13,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
   const [amount, setAmount] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handlePayment = async () => {
     setIsProcessing(true);
+    setError(null);
+    
     try {
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
@@ -33,8 +36,24 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
         }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.text();
+        let errorMessage;
+        try {
+          const parsedError = JSON.parse(errorData);
+          errorMessage = parsedError.error || 'Payment failed. Please try again.';
+        } catch {
+          errorMessage = errorData || 'Payment failed. Please try again.';
+        }
+        throw new Error(errorMessage);
+      }
+
       const session = await response.json();
       
+      if (!session || !session.id) {
+        throw new Error('Invalid session response from server');
+      }
+
       // Redirect to Stripe Checkout
       const result = await stripe.redirectToCheckout({
         sessionId: session.id,
@@ -45,7 +64,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
       }
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
+      setError(error instanceof Error ? error.message : 'Payment failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -59,6 +78,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
             {selectedPlan ? `Subscribe to ${selectedPlan}` : 'Make a Payment'}
           </Dialog.Title>
+          
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
           
           <div className="space-y-4">
             <div>

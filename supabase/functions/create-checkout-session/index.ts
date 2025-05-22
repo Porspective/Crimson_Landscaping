@@ -8,6 +8,7 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Content-Type': 'application/json',
 };
 
 serve(async (req) => {
@@ -16,7 +17,18 @@ serve(async (req) => {
   }
 
   try {
-    const { amount, invoiceNumber, planTitle } = await req.json();
+    // Validate request body
+    const body = await req.json().catch(() => null);
+    if (!body) {
+      throw new Error('Invalid request body');
+    }
+
+    const { amount, invoiceNumber, planTitle } = body;
+
+    // Validate required fields
+    if (!amount || typeof amount !== 'number') {
+      throw new Error('Invalid amount');
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -40,16 +52,18 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ id: session.id }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
+      { headers: corsHeaders },
     );
   } catch (error) {
+    console.error('Checkout session error:', error);
+    
     return new Response(
-      JSON.stringify({ error: error.message }),
-      {
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'Failed to create checkout session' 
+      }),
+      { 
         status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: corsHeaders,
       },
     );
   }
