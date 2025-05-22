@@ -158,6 +158,15 @@ const ContactPage: React.FC = () => {
                     Oklahoma City • Edmond • Norman • Moore • Yukon • Mustang • Midwest City • Del City • And surrounding areas
                   </p>
                 </div>
+
+                <div className="mt-8">
+                  <button
+                    onClick={() => setIsPaymentModalOpen(true)}
+                    className="btn-primary w-full"
+                  >
+                    Make a Payment
+                  </button>
+                </div>
               </div>
             </div>
             
@@ -240,6 +249,7 @@ const ContactPage: React.FC = () => {
       <PaymentModal
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
+        selectedPlan={selectedPlan}
       />
     </div>
   );
