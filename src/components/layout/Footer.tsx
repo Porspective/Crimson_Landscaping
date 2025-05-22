@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Lawn Mowing
+                  <ChevronRight className="h-4 w-4 mr-1" /> Lawn Maintenance
                 </Link>
               </li>
               <li>
@@ -106,7 +106,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Landscaping
+                  <ChevronRight className="h-4 w-4 mr-1" /> Landscaping Design
                 </Link>
               </li>
               <li>
@@ -114,7 +114,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Garden Maintenance
+                  <ChevronRight className="h-4 w-4 mr-1" /> Mulching & Edging
                 </Link>
               </li>
               <li>
@@ -122,7 +122,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Tree Services
+                  <ChevronRight className="h-4 w-4 mr-1" /> Shrub & Tree Care
                 </Link>
               </li>
               <li>
@@ -130,7 +130,7 @@ const Footer: React.FC = () => {
                   to="/services"
                   className="text-gray-400 hover:text-crimson-500 transition-colors flex items-center"
                 >
-                  <ChevronRight className="h-4 w-4 mr-1" /> Commercial Services
+                  <ChevronRight className="h-4 w-4 mr-1" /> Seasonal Cleanup
                 </Link>
               </li>
             </ul>
