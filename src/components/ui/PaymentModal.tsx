@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe('your_publishable_key');
+import { stripePromise } from '../../lib/stripe';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedPlan?: string;
 }
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPlan }) => {
   const [amount, setAmount] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -22,7 +21,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
       if (!stripe) throw new Error('Stripe failed to load');
 
       // Create a payment session
-      const response = await fetch('https://bolt.new/setup/stripe', {
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,6 +29,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
         body: JSON.stringify({
           amount: parseFloat(amount) * 100, // Convert to cents
           invoiceNumber,
+          planTitle: selectedPlan,
         }),
       });
 
@@ -57,7 +57,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
-            Make a Payment
+            {selectedPlan ? `Subscribe to ${selectedPlan}` : 'Make a Payment'}
           </Dialog.Title>
           
           <div className="space-y-4">
