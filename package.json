@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "npx update-browserslist-db@latest",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
