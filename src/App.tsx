@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
@@ -17,8 +17,6 @@ function App() {
 
   return (
     <Routes>
-      {/* Redirect GitHub Pages path to home */}
-
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="services" element={<ServicesPage />} />
