@@ -6,7 +6,7 @@ import './index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/Crimson_Landscaping">
       <App />
     </BrowserRouter>
   </StrictMode>
