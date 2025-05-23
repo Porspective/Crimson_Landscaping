@@ -18,7 +18,6 @@ function App() {
   return (
     <Routes>
       {/* Redirect GitHub Pages path to home */}
-      <Route path="/Crimson_Landscaping/*" element={<Navigate to="/" replace />} />
 
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
