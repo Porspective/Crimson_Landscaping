@@ -5,9 +5,9 @@ export default defineConfig({
   base: '/',
   plugins: [react()],
   server: {
-    headers: {
-      'Content-Type': 'application/javascript',
-    },
+    host: true, // Allow external access
+    port: 5173, // Default Vite port
+    strictPort: true,
   },
   build: {
     outDir: 'dist',
