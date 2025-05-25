@@ -5,19 +5,16 @@ export default defineConfig({
   base: '/',
   plugins: [react()],
   server: {
-    host: true, // Allow external access
-    port: 5173, // Default Vite port
-    strictPort: true,
+    headers: { "Content-Type": "text/javascript" }
   },
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
-    assetsDir: '',
+    assetsDir: 'assets',
     rollupOptions: {
       output: {
-        assetFileNames: '[name][extname]',
-        chunkFileNames: '[name].js',
-        entryFileNames: '[name].js'
+        assetFileNames: 'assets/[name][extname]',
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js'
       }
     }
   }
