@@ -4,17 +4,15 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: './',
   plugins: [react()],
-  server: {
-    port: 5173,
-    host: true
-  },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: true,
+    emptyOutDir: true,
+    assetsDir: '',
     rollupOptions: {
       output: {
-        manualChunks: undefined
+        assetFileNames: '[name][extname]',
+        chunkFileNames: '[name].js',
+        entryFileNames: '[name].js'
       }
     }
   }
