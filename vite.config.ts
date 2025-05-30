@@ -2,10 +2,20 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: '/crimson-clean-co/',
+  base: '/',
   plugins: [react()],
+  server: {
+    headers: { "Content-Type": "text/javascript" }
+  },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets'
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name][extname]',
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js'
+      }
+    }
   }
 });
