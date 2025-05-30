@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { stripePromise } from '../../lib/stripe';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('YOUR_STRIPE_PUBLISHABLE_KEY');
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -34,17 +36,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
 
-      const numAmount = parseFloat(amount);
-      
-      // Create a payment session
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
+      const response = await fetch('YOUR_STRIPE_CHECKOUT_ENDPOINT', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
-          amount: Math.round(numAmount * 100), // Convert to cents and ensure it's an integer
+          amount: Math.round(parseFloat(amount) * 100),
           invoiceNumber,
           planTitle: selectedPlan,
         }),
@@ -56,13 +54,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
         throw new Error(data.error || 'Payment failed. Please try again.');
       }
 
-      if (!data.id) {
-        throw new Error('Invalid session response from server');
-      }
+      const { sessionId } = data;
 
-      // Redirect to Stripe Checkout
       const result = await stripe.redirectToCheckout({
-        sessionId: data.id,
+        sessionId,
       });
 
       if (result.error) {
