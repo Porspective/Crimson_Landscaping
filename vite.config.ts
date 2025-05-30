@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   preview: {
     port: 4173,
-    host: true
+    host: true,
+    strictPort: true
   },
   server: {
     headers: { "Content-Type": "text/javascript" }
