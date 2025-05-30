@@ -22,11 +22,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
       return;
     }
     
-    // Replace with your PayPal.me username
-    const paypalUsername = 'crimsonlandscaping';
+    const paypalUsername = 'CrimsonLandscapingCo';
     const paypalUrl = `https://paypal.me/${paypalUsername}/${amount}`;
     
-    // Open PayPal in a new tab
     window.open(paypalUrl, '_blank');
     onClose();
   };
