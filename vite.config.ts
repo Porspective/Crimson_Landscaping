@@ -2,20 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: '/',
   plugins: [react()],
   server: {
-    headers: { "Content-Type": "text/javascript" }
+    port: 3000,
+    open: true
   },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    rollupOptions: {
-      output: {
-        assetFileNames: 'assets/[name][extname]',
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js'
-      }
-    }
+  preview: {
+    port: 3000
   }
 });
