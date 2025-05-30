@@ -26,7 +26,6 @@ const ContactForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     
-    // Clear error when user types
     if (formErrors[name as keyof typeof formErrors]) {
       setFormErrors((prev) => ({ ...prev, [name]: '' }));
     }
