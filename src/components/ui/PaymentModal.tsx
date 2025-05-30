@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { stripePromise } from '../../lib/stripe';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -31,37 +30,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
     }
 
     try {
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
-
-      const numAmount = parseFloat(amount);
-      
-      // Create a payment session
-      const response = await fetch('https://crimson-landscaping.com/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: Math.round(numAmount * 100),
-          invoiceNumber,
-          planTitle: selectedPlan,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Payment failed. Please try again.');
-      }
-
-      const result = await stripe.redirectToCheckout({
-        sessionId: data.sessionId,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
+      // Simulated payment processing
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      window.location.href = '/payment-success';
     } catch (error) {
       console.error('Payment error:', error);
       setError(error instanceof Error ? error.message : 'Payment failed. Please try again.');
