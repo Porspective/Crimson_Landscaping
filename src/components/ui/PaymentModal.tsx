@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
   const handlePayPalCreateOrder = (data: any, actions: any) => {
     if (!validateAmount(amount)) {
       setError('Please enter a valid amount');
-      return Promise.reject(new Error('Invalid amount'));
+      return actions.reject();
     }
 
     return actions.order.create({
@@ -39,7 +39,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
   const handlePayPalApprove = async (data: any, actions: any) => {
     try {
       setIsProcessing(true);
-      await actions.order.capture();
+      const details = await actions.order.capture();
       window.location.href = '/payment-success';
     } catch (error) {
       console.error('Payment failed:', error);
@@ -89,7 +89,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
 
             {validateAmount(amount) && (
               <PayPalScriptProvider options={{
-                "client-id": "test",
+                "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID || "test",
                 currency: "USD",
                 intent: "capture"
               }}>
