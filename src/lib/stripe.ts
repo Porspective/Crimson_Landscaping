@@ -1,6 +1,12 @@
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const publishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+
+if (!publishableKey) {
+  throw new Error('Stripe publishable key is missing. Please check your environment variables.');
+}
+
+const stripePromise = loadStripe(publishableKey);
 
 export const createCheckoutSession = async (amount: number, invoiceNumber?: string) => {
   try {
