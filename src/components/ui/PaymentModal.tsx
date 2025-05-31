@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -8,8 +9,45 @@ interface PaymentModalProps {
   selectedPlan?: string;
 }
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPlan }) => {
   const [amount, setAmount] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const validateAmount = (amount: string): boolean => {
+    const numAmount = parseFloat(amount);
+    return !isNaN(numAmount) && numAmount > 0;
+  };
+
+  const handlePayPalCreateOrder = (data: any, actions: any) => {
+    if (!validateAmount(amount)) {
+      setError('Please enter a valid amount');
+      return Promise.reject(new Error('Invalid amount'));
+    }
+
+    return actions.order.create({
+      purchase_units: [{
+        description: selectedPlan || 'Crimson Landscaping Service',
+        amount: {
+          value: amount,
+          currency_code: 'USD'
+        }
+      }]
+    });
+  };
+
+  const handlePayPalApprove = async (data: any, actions: any) => {
+    try {
+      setIsProcessing(true);
+      await actions.order.capture();
+      window.location.href = '/payment-success';
+    } catch (error) {
+      console.error('Payment failed:', error);
+      setError('Payment failed. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
@@ -17,8 +55,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fade-in">
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
-            Make a Payment
+            {selectedPlan ? `Pay for ${selectedPlan}` : 'Make a Payment'}
           </Dialog.Title>
+          
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
           
           <div className="space-y-4">
             <div>
@@ -30,43 +74,44 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
                 <input
                   type="number"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                    setError(null);
+                  }}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
                   placeholder="0.00"
                   min="0.01"
                   step="0.01"
+                  disabled={isProcessing}
                 />
               </div>
             </div>
-            
-            <a 
-              href={`https://paypal.me/CrimsonLandscapingCo/${amount}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`w-full bg-[#0070BA] text-white py-3 px-4 rounded-md font-medium hover:bg-[#005ea6] transition-colors flex items-center justify-center mb-2 ${!amount && 'opacity-50 cursor-not-allowed'}`}
-              onClick={(e) => !amount && e.preventDefault()}
-            >
-              Pay with PayPal
-            </a>
 
-            <a 
-              href={`https://venmo.com/Crimson-Landscaping`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`w-full bg-[#008CFF] text-white py-3 px-4 rounded-md font-medium hover:bg-[#0074D4] transition-colors flex items-center justify-center ${!amount && 'opacity-50 cursor-not-allowed'}`}
-            >
-              Pay with Venmo
-            </a>
-            
-            <p className="text-sm text-gray-500 text-center mt-4">
-              You will be redirected to complete your payment.
-            </p>
+            {validateAmount(amount) && (
+              <PayPalScriptProvider options={{
+                "client-id": "test",
+                currency: "USD",
+                intent: "capture"
+              }}>
+                <PayPalButtons
+                  style={{ layout: "vertical" }}
+                  createOrder={handlePayPalCreateOrder}
+                  onApprove={handlePayPalApprove}
+                  onError={(err) => {
+                    console.error('PayPal error:', err);
+                    setError('Payment failed. Please try again.');
+                  }}
+                  disabled={isProcessing}
+                />
+              </PayPalScriptProvider>
+            )}
           </div>
           
           <Dialog.Close asChild>
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
               aria-label="Close"
+              disabled={isProcessing}
             >
               <X className="h-5 w-5" />
             </button>
