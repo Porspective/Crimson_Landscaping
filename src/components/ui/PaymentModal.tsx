@@ -28,7 +28,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
 
     return actions.order.create({
       purchase_units: [{
-        description: selectedPlan || 'One-time Payment',
+        description: selectedPlan || 'Crimson Landscaping Service',
         custom_id: invoiceNumber || undefined,
         amount: {
           value: amount,
@@ -40,17 +40,21 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
 
   const onApprove = async (data: any, actions: any) => {
     try {
+      setIsProcessing(true);
       const order = await actions.order.capture();
       window.location.href = '/payment-success';
     } catch (error) {
       console.error('Payment error:', error);
       setError('Payment failed. Please try again.');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const onError = (err: any) => {
     console.error('PayPal error:', err);
     setError('Payment failed. Please try again or contact support.');
+    setIsProcessing(false);
   };
 
   return (
@@ -59,7 +63,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
-            {selectedPlan ? `Subscribe to ${selectedPlan}` : 'Make a Payment'}
+            {selectedPlan ? `Pay for ${selectedPlan}` : 'Make a Payment'}
           </Dialog.Title>
           
           {error && (
@@ -96,13 +100,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
                   placeholder="0.00"
                   min="0.01"
                   step="0.01"
+                  disabled={isProcessing}
                 />
               </div>
             </div>
 
             {validateAmount(amount) && (
               <PayPalScriptProvider options={{ 
-                "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+                "client-id": "@CrimsonLandscapingCo",
                 currency: "USD"
               }}>
                 <PayPalButtons
@@ -120,6 +125,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
               aria-label="Close"
+              disabled={isProcessing}
             >
               <X className="h-5 w-5" />
             </button>
