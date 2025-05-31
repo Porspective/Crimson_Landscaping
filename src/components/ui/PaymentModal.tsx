@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { stripePromise } from '../../lib/stripe';
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -20,56 +20,37 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
     return !isNaN(numAmount) && numAmount > 0;
   };
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
-    setError(null);
-    
+  const createOrder = (data: any, actions: any) => {
     if (!validateAmount(amount)) {
       setError('Please enter a valid amount greater than 0');
-      setIsProcessing(false);
-      return;
+      return Promise.reject(new Error('Invalid amount'));
     }
 
+    return actions.order.create({
+      purchase_units: [{
+        description: selectedPlan || 'One-time Payment',
+        custom_id: invoiceNumber || undefined,
+        amount: {
+          value: amount,
+          currency_code: 'USD'
+        }
+      }]
+    });
+  };
+
+  const onApprove = async (data: any, actions: any) => {
     try {
-      const numAmount = parseFloat(amount);
-      
-      // Create a payment session
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
-          amount: Math.round(numAmount * 100), // Convert to cents
-          invoiceNumber,
-          planTitle: selectedPlan,
-          success_url: `${window.location.origin}/payment-success`,
-          cancel_url: `${window.location.origin}/contact`,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Payment failed. Please try again.');
-      }
-      
-      if (!data || !data.url) {
-        throw new Error('Invalid response from server');
-      }
-
-      // Redirect to Stripe Checkout
-      window.location.href = data.url;
+      const order = await actions.order.capture();
+      window.location.href = '/payment-success';
     } catch (error) {
       console.error('Payment error:', error);
-      setError(
-        error instanceof Error 
-          ? error.message 
-          : 'Unable to process payment. Please try again later or contact support.'
-      );
-      setIsProcessing(false);
+      setError('Payment failed. Please try again.');
     }
+  };
+
+  const onError = (err: any) => {
+    console.error('PayPal error:', err);
+    setError('Payment failed. Please try again or contact support.');
   };
 
   return (
@@ -118,23 +99,21 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
                 />
               </div>
             </div>
-          </div>
-          
-          <div className="mt-6 flex gap-4">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
-              disabled={isProcessing}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handlePayment}
-              disabled={isProcessing || !validateAmount(amount)}
-              className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isProcessing ? 'Processing...' : 'Pay Now'}
-            </button>
+
+            {validateAmount(amount) && (
+              <PayPalScriptProvider options={{ 
+                "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+                currency: "USD"
+              }}>
+                <PayPalButtons
+                  style={{ layout: "vertical" }}
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                  onError={onError}
+                  disabled={isProcessing}
+                />
+              </PayPalScriptProvider>
+            )}
           </div>
           
           <Dialog.Close asChild>
