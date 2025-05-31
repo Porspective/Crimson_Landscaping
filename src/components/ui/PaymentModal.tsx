@@ -49,12 +49,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Payment failed' }));
-        throw new Error(errorData.error || 'Payment failed. Please try again.');
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Payment failed. Please try again.');
+      }
       
       if (!data || !data.url) {
         throw new Error('Invalid response from server');
@@ -64,7 +63,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
       window.location.href = data.url;
     } catch (error) {
       console.error('Payment error:', error);
-      setError(error instanceof Error ? error.message : 'Payment failed. Please try again.');
+      setError(
+        error instanceof Error 
+          ? error.message 
+          : 'Unable to process payment. Please try again later or contact support.'
+      );
       setIsProcessing(false);
     }
   };

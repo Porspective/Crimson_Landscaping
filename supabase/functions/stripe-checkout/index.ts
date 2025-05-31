@@ -1,20 +1,6 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import Stripe from 'npm:stripe@17.7.0';
 
-// Verify required environment variables
-const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY');
-if (!stripeSecret) {
-  console.error('STRIPE_SECRET_KEY environment variable is not set');
-  throw new Error('Server configuration error');
-}
-
-const stripe = new Stripe(stripeSecret, {
-  appInfo: {
-    name: 'Bolt Integration',
-    version: '1.0.0',
-  },
-});
-
 // Helper function to create responses with CORS headers
 function corsResponse(body: string | object | null, status = 200) {
   const headers = {
@@ -47,6 +33,21 @@ Deno.serve(async (req) => {
     if (req.method !== 'POST') {
       return corsResponse({ error: 'Method not allowed' }, 405);
     }
+
+    // Verify required environment variables first
+    const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY');
+    if (!stripeSecret) {
+      return corsResponse({ 
+        error: 'Payment processing is temporarily unavailable. Please contact support.' 
+      }, 503);
+    }
+
+    const stripe = new Stripe(stripeSecret, {
+      appInfo: {
+        name: 'Bolt Integration',
+        version: '1.0.0',
+      },
+    });
 
     // Parse request body
     const requestData = await req.json().catch(() => null);
@@ -92,7 +93,9 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Checkout error:', error);
     return corsResponse({
-      error: error instanceof Error ? error.message : 'An unexpected error occurred'
+      error: error instanceof Error 
+        ? error.message 
+        : 'An error occurred while processing your payment. Please try again later.'
     }, 500);
   }
 });
