@@ -6,7 +6,7 @@ const Testimonials: React.FC = () => {
     {
       name: 'Sarah Johnson',
       location: 'Oklahoma City, OK',
-      quote: 'Crimson Clean Co did an incredible job on our driveway and house exterior. They were professional, punctual, and the results were amazing. Our house looks brand new!',
+      quote: 'Crimson Landscaping did an incredible job on our driveway and house exterior. They were professional, punctual, and the results were amazing. Our house looks brand new!',
       rating: 5
     },
     {
@@ -24,7 +24,7 @@ const Testimonials: React.FC = () => {
     {
       name: 'John Martinez',
       location: 'Moore, OK',
-      quote: 'After Crimson Clean Co cleaned our commercial storefront, we received so many compliments from customers. Their team was professional and efficient.',
+      quote: 'After Crimson Landscaping cleaned our commercial storefront, we received so many compliments from customers. Their team was professional and efficient.',
       rating: 5
     }
   ];
