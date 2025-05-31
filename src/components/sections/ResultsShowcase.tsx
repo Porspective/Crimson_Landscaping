@@ -8,13 +8,13 @@ const ResultsShowcase: React.FC = () => {
   const results = [
     {
       title: 'Driveway Transformation',
-      beforeImage: '/assets/1.jpg',
-      afterImage: '/assets/2.jpg'
+      beforeImage: './assets/before1.jpg',
+      afterImage: './assets/after1.jpg'
     },
     {
       title: 'Lawn Mowing',
-      beforeImage: '/assets/3.jpg',
-      afterImage: '/assets/4.jpg'
+      beforeImage: './assets/before2.jpg',
+      afterImage: './assets/after2.jpg'
     }
   ];
 
