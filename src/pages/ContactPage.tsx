@@ -34,10 +34,10 @@ const ContactPage: React.FC = () => {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
                       <a 
-                        href="tel:+14054972081" 
+                        href="tel:+14052935872" 
                         className="text-gray-700 hover:text-crimson-700 transition-colors"
                       >
-                        (405) 497-2081
+                        (405) 293-5872
                       </a>
                     </div>
                   </div>

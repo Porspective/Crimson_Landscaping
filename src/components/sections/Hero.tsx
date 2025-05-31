@@ -51,11 +51,11 @@ const Hero: React.FC = () => {
               Get a Free Quote
             </Link>
             <a 
-              href="tel:+14054972081" 
+              href="tel:+14052935872" 
               className="btn-secondary text-center sm:text-left flex items-center justify-center"
             >
               <PhoneCall className="h-4 w-4 mr-2" />
-              (405) 497-2081
+              (405) 293-5872
             </a>
           </div>
         </div>
