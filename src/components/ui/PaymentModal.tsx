@@ -31,49 +31,40 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
     }
 
     try {
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
-
       const numAmount = parseFloat(amount);
       
       // Create a payment session
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
-          amount: Math.round(numAmount * 100), // Convert to cents and ensure it's an integer
+          amount: Math.round(numAmount * 100), // Convert to cents
           invoiceNumber,
           planTitle: selectedPlan,
           success_url: `${window.location.origin}/payment-success`,
-          cancel_url: `${window.location.origin}`,
+          cancel_url: `${window.location.origin}/contact`,
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Failed to process payment' }));
+        const errorData = await response.json().catch(() => ({ error: 'Payment failed' }));
         throw new Error(errorData.error || 'Payment failed. Please try again.');
       }
 
-      const data = await response.json().catch(() => null);
-      if (!data || !data.id) {
+      const data = await response.json();
+      
+      if (!data || !data.url) {
         throw new Error('Invalid response from server');
       }
 
       // Redirect to Stripe Checkout
-      const result = await stripe.redirectToCheckout({
-        sessionId: data.id,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
+      window.location.href = data.url;
     } catch (error) {
       console.error('Payment error:', error);
       setError(error instanceof Error ? error.message : 'Payment failed. Please try again.');
-    } finally {
       setIsProcessing(false);
     }
   };
