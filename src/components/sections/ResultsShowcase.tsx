@@ -12,7 +12,7 @@ const ResultsShowcase: React.FC = () => {
       afterImage: './2.jpg'
     },
     {
-      title: 'Deck Restoration',
+      title: 'Lawn Mowing',
       beforeImage: './3.jpg',
       afterImage: './4.jpg'
     }
