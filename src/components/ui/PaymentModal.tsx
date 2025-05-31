@@ -43,14 +43,23 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
               href={`https://paypal.me/CrimsonLandscapingCo/${amount}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-full bg-crimson-700 text-white py-3 px-4 rounded-md font-medium hover:bg-crimson-800 transition-colors flex items-center justify-center ${!amount && 'opacity-50 cursor-not-allowed'}`}
+              className={`w-full bg-[#0070BA] text-white py-3 px-4 rounded-md font-medium hover:bg-[#005ea6] transition-colors flex items-center justify-center mb-2 ${!amount && 'opacity-50 cursor-not-allowed'}`}
               onClick={(e) => !amount && e.preventDefault()}
             >
               Pay with PayPal
             </a>
+
+            <a 
+              href={`https://venmo.com/Crimson-Landscaping`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-full bg-[#008CFF] text-white py-3 px-4 rounded-md font-medium hover:bg-[#0074D4] transition-colors flex items-center justify-center ${!amount && 'opacity-50 cursor-not-allowed'}`}
+            >
+              Pay with Venmo
+            </a>
             
             <p className="text-sm text-gray-500 text-center mt-4">
-              You will be redirected to PayPal to complete your payment.
+              You will be redirected to complete your payment.
             </p>
           </div>
           
