@@ -1,36 +1,73 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { createCheckoutSession } from '../../lib/stripe';
+import { stripePromise } from '../../lib/stripe';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedPlan?: string;
 }
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPlan }) => {
   const [amount, setAmount] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const validateAmount = (amount: string): boolean => {
+    const numAmount = parseFloat(amount);
+    return !isNaN(numAmount) && numAmount > 0;
+  };
+
   const handlePayment = async () => {
     setIsProcessing(true);
     setError(null);
+    
+    if (!validateAmount(amount)) {
+      setError('Please enter a valid amount greater than 0');
+      setIsProcessing(false);
+      return;
+    }
 
     try {
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error('Stripe failed to load');
+
       const numAmount = parseFloat(amount);
-      if (isNaN(numAmount) || numAmount <= 0) {
-        throw new Error('Please enter a valid amount');
-      }
-
-      const session = await createCheckoutSession(numAmount, invoiceNumber);
       
-      if (session.error) {
-        throw new Error(session.error.message);
+      // Create a payment session
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          amount: Math.round(numAmount * 100), // Convert to cents and ensure it's an integer
+          invoiceNumber,
+          planTitle: selectedPlan,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Payment failed. Please try again.');
       }
 
-      window.location.href = session.url;
+      if (!data.id) {
+        throw new Error('Invalid session response from server');
+      }
+
+      // Redirect to Stripe Checkout
+      const result = await stripe.redirectToCheckout({
+        sessionId: data.id,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
     } catch (error) {
       console.error('Payment error:', error);
       setError(error instanceof Error ? error.message : 'Payment failed. Please try again.');
@@ -45,7 +82,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
-            Make a Payment
+            {selectedPlan ? `Subscribe to ${selectedPlan}` : 'Make a Payment'}
           </Dialog.Title>
           
           {error && (
@@ -91,15 +128,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
             <button
               onClick={onClose}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isProcessing}
             >
               Cancel
             </button>
             <button
               onClick={handlePayment}
-              disabled={isProcessing || !amount}
+              disabled={isProcessing || !validateAmount(amount)}
               className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProcessing ? 'Processing...' : 'Pay with Stripe'}
+              {isProcessing ? 'Processing...' : 'Pay Now'}
             </button>
           </div>
           

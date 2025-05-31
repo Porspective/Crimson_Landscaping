@@ -26,6 +26,7 @@ const ContactForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     
+    // Clear error when user types
     if (formErrors[name as keyof typeof formErrors]) {
       setFormErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -67,16 +68,18 @@ const ContactForm: React.FC = () => {
     setSubmitError(null);
     
     try {
-      const response = await fetch('https://formspree.io/f/xanjwbql', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit-contact`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit form');
       }
 
       setSubmitSuccess(true);
@@ -88,6 +91,7 @@ const ContactForm: React.FC = () => {
         message: '',
       });
       
+      // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
