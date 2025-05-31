@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center mb-4">
-              <img src="./CL.png" alt="Crimson Landscaping Logo" className="h-16 w-16" />
+              <img src="/CL.png" alt="Crimson Landscaping Logo" className="h-16 w-16" />
               <span className="ml-2 text-xl font-bold">Crimson Landscaping</span>
             </div>
             <p className="text-gray-400 mb-4">

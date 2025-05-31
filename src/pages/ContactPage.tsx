@@ -5,7 +5,6 @@ import PaymentModal from '../components/ui/PaymentModal';
 
 const ContactPage: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
   return (
     <div>
@@ -175,7 +174,6 @@ const ContactPage: React.FC = () => {
       <PaymentModal
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
-        selectedPlan={selectedPlan}
       />
     </div>
   );
