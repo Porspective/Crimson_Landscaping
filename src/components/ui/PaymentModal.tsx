@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { stripePromise } from '../../lib/stripe';
+import { createCheckoutSession } from '../../lib/stripe';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -19,51 +19,18 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
     setError(null);
 
     try {
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
-
       const numAmount = parseFloat(amount);
       if (isNaN(numAmount) || numAmount <= 0) {
         throw new Error('Please enter a valid amount');
       }
 
-      const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          payment_method_types: ['card'],
-          line_items: [{
-            price_data: {
-              currency: 'usd',
-              product_data: {
-                name: invoiceNumber ? `Invoice #${invoiceNumber}` : 'Crimson Landscaping Service',
-              },
-              unit_amount: Math.round(numAmount * 100),
-            },
-            quantity: 1,
-          }],
-          mode: 'payment',
-          success_url: `${window.location.origin}/#/payment-success`,
-          cancel_url: `${window.location.origin}/#/contact`,
-        }),
-      });
-
-      const session = await response.json();
+      const session = await createCheckoutSession(numAmount, invoiceNumber);
       
       if (session.error) {
         throw new Error(session.error.message);
       }
 
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
+      window.location.href = session.url;
     } catch (error) {
       console.error('Payment error:', error);
       setError(error instanceof Error ? error.message : 'Payment failed. Please try again.');
