@@ -6,7 +6,7 @@ if (!publishableKey) {
   throw new Error('Stripe publishable key is missing. Please check your environment variables.');
 }
 
-const stripePromise = loadStripe(publishableKey);
+export const stripePromise = loadStripe(publishableKey);
 
 export const createCheckoutSession = async (amount: number, invoiceNumber?: string) => {
   try {
@@ -16,24 +16,37 @@ export const createCheckoutSession = async (amount: number, invoiceNumber?: stri
     // Convert amount to cents
     const amountInCents = Math.round(amount * 100);
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: invoiceNumber ? `Invoice #${invoiceNumber}` : 'Crimson Landscaping Service',
+    const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publishableKey}`,
+      },
+      body: JSON.stringify({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: invoiceNumber ? `Invoice #${invoiceNumber}` : 'Crimson Landscaping Service',
+              },
+              unit_amount: amountInCents,
             },
-            unit_amount: amountInCents,
+            quantity: 1,
           },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${window.location.origin}/#/payment-success`,
-      cancel_url: `${window.location.origin}/#/contact`,
+        ],
+        mode: 'payment',
+        success_url: `${window.location.origin}/#/payment-success`,
+        cancel_url: `${window.location.origin}/#/contact`,
+      }),
     });
+
+    const session = await response.json();
+
+    if (!response.ok) {
+      throw new Error(session.error?.message || 'Failed to create checkout session');
+    }
 
     return {
       url: session.url,
