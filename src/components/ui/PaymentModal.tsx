@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 
@@ -9,6 +9,8 @@ interface PaymentModalProps {
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
+  const [amount, setAmount] = useState('');
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
@@ -19,15 +21,30 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
           </Dialog.Title>
           
           <div className="space-y-4">
-            <p className="text-gray-700">
-              Click the button below to make a payment through PayPal:
-            </p>
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                Amount
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
+                  placeholder="0.00"
+                  min="0.01"
+                  step="0.01"
+                />
+              </div>
+            </div>
             
             <a 
-              href="https://paypal.me/CrimsonLandscapingCo"
+              href={`https://paypal.me/CrimsonLandscapingCo/${amount}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-crimson-700 text-white py-3 px-4 rounded-md font-medium hover:bg-crimson-800 transition-colors flex items-center justify-center"
+              className={`w-full bg-crimson-700 text-white py-3 px-4 rounded-md font-medium hover:bg-crimson-800 transition-colors flex items-center justify-center ${!amount && 'opacity-50 cursor-not-allowed'}`}
+              onClick={(e) => !amount && e.preventDefault()}
             >
               Pay with PayPal
             </a>
