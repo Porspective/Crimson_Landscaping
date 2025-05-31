@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -19,9 +19,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
     return !isNaN(numAmount) && numAmount > 0;
   };
 
-  const createOrder = (data: any, actions: any) => {
+  const handlePayPalCreateOrder = (data: any, actions: any) => {
     if (!validateAmount(amount)) {
-      setError('Please enter a valid amount greater than 0');
+      setError('Please enter a valid amount');
       return Promise.reject(new Error('Invalid amount'));
     }
 
@@ -36,30 +36,24 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
     });
   };
 
-  const onApprove = async (data: any, actions: any) => {
+  const handlePayPalApprove = async (data: any, actions: any) => {
     try {
       setIsProcessing(true);
-      const order = await actions.order.capture();
+      await actions.order.capture();
       window.location.href = '/payment-success';
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error('Payment failed:', error);
       setError('Payment failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const onError = (err: any) => {
-    console.error('PayPal error:', err);
-    setError('Payment failed. Please try again or contact support.');
-    setIsProcessing(false);
-  };
-
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md animate-fade-in">
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
             {selectedPlan ? `Pay for ${selectedPlan}` : 'Make a Payment'}
           </Dialog.Title>
@@ -80,7 +74,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
                 <input
                   type="number"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                    setError(null);
+                  }}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
                   placeholder="0.00"
                   min="0.01"
@@ -91,15 +88,19 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
             </div>
 
             {validateAmount(amount) && (
-              <PayPalScriptProvider options={{ 
-                "client-id": "@CrimsonLandscapingCo",
-                currency: "USD"
+              <PayPalScriptProvider options={{
+                "client-id": "test",
+                currency: "USD",
+                intent: "capture"
               }}>
                 <PayPalButtons
                   style={{ layout: "vertical" }}
-                  createOrder={createOrder}
-                  onApprove={onApprove}
-                  onError={onError}
+                  createOrder={handlePayPalCreateOrder}
+                  onApprove={handlePayPalApprove}
+                  onError={(err) => {
+                    console.error('PayPal error:', err);
+                    setError('Payment failed. Please try again.');
+                  }}
                   disabled={isProcessing}
                 />
               </PayPalScriptProvider>
