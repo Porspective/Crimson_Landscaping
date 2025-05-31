@@ -50,14 +50,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Payment failed. Please try again.');
+        const errorData = await response.json().catch(() => ({ error: 'Failed to process payment' }));
+        throw new Error(errorData.error || 'Payment failed. Please try again.');
       }
 
-      if (!data.id) {
-        throw new Error('Invalid session response from server');
+      const data = await response.json().catch(() => null);
+      if (!data || !data.id) {
+        throw new Error('Invalid response from server');
       }
 
       // Redirect to Stripe Checkout
