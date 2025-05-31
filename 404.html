@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script>
-      const path = window.location.pathname;
-      localStorage.setItem('path', path);
-      window.location.href = '/#' + path;
+      sessionStorage.redirect = location.href;
+      location.replace(location.origin + '/#' + location.pathname + location.search);
     </script>
   </head>
   <body></body>
