@@ -49,9 +49,9 @@ const ContactPage: React.FC = () => {
                       <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
                       <a 
                         href="mailto:crimson.landscaping.co@gmail.com" 
-                        className="text-gray-700 hover:text-crimson-700 transition-colors"
+                        className="text-gray-700 hover:text-crimson-700 transition-colors break-words"
                       >
-                        crimson.landscaping.co@gmail.com
+                        crimson.landscaping.co<wbr />@gmail.com
                       </a>
                     </div>
                   </div>
