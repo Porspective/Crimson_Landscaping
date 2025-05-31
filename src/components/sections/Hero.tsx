@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
           </h1>
           
           <p className="text-white text-lg md:text-xl max-w-2xl mb-8 animate-slide-up">
-            Transforming your property one clean at a time. Crimson Clean Co provides top-quality 
+            Transforming your property one clean at a time. Crimson Landscaping provides top-quality 
             pressure washing and mowing services for residential and commercial properties.
           </p>
           
