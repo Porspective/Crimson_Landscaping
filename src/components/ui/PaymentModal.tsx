@@ -11,7 +11,6 @@ interface PaymentModalProps {
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPlan }) => {
   const [amount, setAmount] = useState('');
-  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +28,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
     return actions.order.create({
       purchase_units: [{
         description: selectedPlan || 'Crimson Landscaping Service',
-        custom_id: invoiceNumber || undefined,
         amount: {
           value: amount,
           currency_code: 'USD'
@@ -73,19 +71,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
           )}
           
           <div className="space-y-4">
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Invoice Number (Optional)
-              </label>
-              <input
-                type="text"
-                value={invoiceNumber}
-                onChange={(e) => setInvoiceNumber(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
-                placeholder="Enter invoice number"
-              />
-            </div>
-            
             <div>
               <label className="block text-gray-700 font-medium mb-2">
                 Amount
