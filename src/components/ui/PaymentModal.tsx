@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { stripePromise, createCheckoutSession } from '../../lib/stripe';
+import { products } from '../../lib/stripe-config';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -10,22 +11,10 @@ interface PaymentModalProps {
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPlan }) => {
-  const [amount, setAmount] = useState('');
-  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const validateAmount = (amount: string): boolean => {
-    const numAmount = parseFloat(amount);
-    return !isNaN(numAmount) && numAmount > 0;
-  };
-
   const handlePayment = async () => {
-    if (!validateAmount(amount)) {
-      setError('Please enter a valid amount greater than 0');
-      return;
-    }
-
     setIsProcessing(true);
     setError(null);
 
@@ -33,18 +22,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
 
-      const session = await createCheckoutSession(parseFloat(amount), invoiceNumber);
+      const product = selectedPlan ? products[selectedPlan as keyof typeof products] : products.lawnmowing;
       
-      if (!session.id) {
-        throw new Error('Failed to create checkout session');
-      }
-
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message);
+      const { sessionId } = await createCheckoutSession(product.priceId, product.mode);
+      
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+      
+      if (stripeError) {
+        throw stripeError;
       }
     } catch (error) {
       console.error('Payment error:', error);
@@ -69,39 +54,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
             </div>
           )}
           
-          <div className="space-y-4">
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Invoice Number (Optional)
-              </label>
-              <input
-                type="text"
-                value={invoiceNumber}
-                onChange={(e) => setInvoiceNumber(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
-                placeholder="Enter invoice number"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Amount
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
-                  placeholder="0.00"
-                  min="0.01"
-                  step="0.01"
-                />
-              </div>
-            </div>
-          </div>
-          
           <div className="mt-6 flex gap-4">
             <button
               onClick={onClose}
@@ -111,7 +63,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
             </button>
             <button
               onClick={handlePayment}
-              disabled={isProcessing || !validateAmount(amount)}
+              disabled={isProcessing}
               className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? 'Processing...' : 'Pay Now'}
