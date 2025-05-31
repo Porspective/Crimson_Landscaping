@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { stripePromise, createCheckoutSession } from '../../lib/stripe';
-import { products } from '../../lib/stripe-config';
+import { stripePromise } from '../../lib/stripe';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedPlan?: string;
 }
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPlan }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
+  const [amount, setAmount] = useState('');
+  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,14 +22,47 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
 
-      const product = selectedPlan ? products[selectedPlan as keyof typeof products] : products.lawnmowing;
+      const numAmount = parseFloat(amount);
+      if (isNaN(numAmount) || numAmount <= 0) {
+        throw new Error('Please enter a valid amount');
+      }
+
+      const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          payment_method_types: ['card'],
+          line_items: [{
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: invoiceNumber ? `Invoice #${invoiceNumber}` : 'Crimson Landscaping Service',
+              },
+              unit_amount: Math.round(numAmount * 100),
+            },
+            quantity: 1,
+          }],
+          mode: 'payment',
+          success_url: `${window.location.origin}/#/payment-success`,
+          cancel_url: `${window.location.origin}/#/contact`,
+        }),
+      });
+
+      const session = await response.json();
       
-      const { sessionId } = await createCheckoutSession(product.priceId, product.mode);
-      
-      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
-      
-      if (stripeError) {
-        throw stripeError;
+      if (session.error) {
+        throw new Error(session.error.message);
+      }
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message);
       }
     } catch (error) {
       console.error('Payment error:', error);
@@ -45,7 +78,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
           <Dialog.Title className="text-2xl font-bold text-crimson-900 mb-4">
-            {selectedPlan ? `Subscribe to ${selectedPlan}` : 'Make a Payment'}
+            Make a Payment
           </Dialog.Title>
           
           {error && (
@@ -53,6 +86,39 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
               {error}
             </div>
           )}
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                Invoice Number (Optional)
+              </label>
+              <input
+                type="text"
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
+                placeholder="Enter invoice number"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                Amount
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crimson-500"
+                  placeholder="0.00"
+                  min="0.01"
+                  step="0.01"
+                />
+              </div>
+            </div>
+          </div>
           
           <div className="mt-6 flex gap-4">
             <button
@@ -63,10 +129,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
             </button>
             <button
               onClick={handlePayment}
-              disabled={isProcessing}
+              disabled={isProcessing || !amount}
               className="flex-1 px-4 py-2 bg-crimson-700 text-white rounded-md hover:bg-crimson-800 focus:outline-none focus:ring-2 focus:ring-crimson-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProcessing ? 'Processing...' : 'Pay Now'}
+              {isProcessing ? 'Processing...' : 'Pay with Stripe'}
             </button>
           </div>
           
