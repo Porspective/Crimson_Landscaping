@@ -47,6 +47,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, selectedPl
           amount: Math.round(numAmount * 100), // Convert to cents and ensure it's an integer
           invoiceNumber,
           planTitle: selectedPlan,
+          success_url: `${window.location.origin}/payment-success`,
+          cancel_url: `${window.location.origin}`,
         }),
       });
 
