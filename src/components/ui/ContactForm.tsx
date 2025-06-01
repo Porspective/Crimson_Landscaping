@@ -1,17 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 
 const ContactForm: React.FC = () => {
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const response = await fetch('https://formspree.io/f/xanjwbql', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        navigate('/thank-you');
+      } else {
+        throw new Error('Failed to submit form');
+      }
+    } catch (err) {
+      setError('Failed to submit form. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <form 
-      action="https://formspree.io/f/xanjwbql" 
-      method="POST"
+      onSubmit={handleSubmit}
       className="bg-white p-6 md:p-8 rounded-lg shadow-lg"
-    >
-      <input type="hidden" name="_subject" value="New Quote Request from crimson-landscaping.com" />
-      <input type="hidden" name="_next" value="https://crimson-landscaping.com/thank-you" />
-      
+    >      
       <h3 className="text-2xl font-bold mb-6 text-center text-crimson-900">Get a Free Quote</h3>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
+          {error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -50,8 +84,14 @@ const ContactForm: React.FC = () => {
       </div>
       
       <div className="mt-6">
-        <Button type="submit" variant="primary" fullWidth className="py-3 text-lg font-medium">
-          Get Your Free Quote
+        <Button 
+          type="submit" 
+          variant="primary" 
+          fullWidth 
+          className="py-3 text-lg font-medium"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Sending...' : 'Get Your Free Quote'}
         </Button>
       </div>
       
