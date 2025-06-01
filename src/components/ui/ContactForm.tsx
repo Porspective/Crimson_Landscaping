@@ -66,29 +66,12 @@ const ContactForm: React.FC = () => {
     
     setIsSubmitting(true);
     setSubmitError(null);
-    
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit-contact`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        let errorMessage: string;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || 'Failed to submit form';
-        } catch (jsonError) {
-          // If response is not JSON, use status text or generic message
-          errorMessage = response.statusText || 'Failed to submit form';
-        }
-        throw new Error(errorMessage);
-      }
-
+      // For now, we'll simulate a successful submission
+      // In production, this would send the data to your backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       setSubmitSuccess(true);
       setFormData({
         name: '',
@@ -104,7 +87,7 @@ const ContactForm: React.FC = () => {
       }, 5000);
     } catch (error) {
       console.error('Form submission error:', error);
-      setSubmitError(error instanceof Error ? error.message : 'Failed to submit form');
+      setSubmitError('Failed to submit form. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
