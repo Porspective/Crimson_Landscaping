@@ -162,9 +162,9 @@ const ContactPage: React.FC = () => {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">What payment methods do you accept?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">Do you provide free estimates?</h3>
               <p className="text-gray-700">
-                We accept various payment methods including credit/debit cards, PayPal, and Venmo for your convenience.
+                Yes, we provide free, no-obligation estimates for all our services. Contact us to schedule your free consultation.
               </p>
             </div>
           </div>
