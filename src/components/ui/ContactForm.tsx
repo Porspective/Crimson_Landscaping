@@ -57,57 +57,52 @@ const ContactForm: React.FC = () => {
     setFormErrors(newErrors);
     return valid;
   };
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setSubmitError('');
-  setIsSubmitting(true);
 
-  if (!validateForm()) {
-    setIsSubmitting(false);
-    return;
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-  try {
-    const response = await fetch('https://formspree.io/f/xanjwbql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        service: formData.service,
-        message: formData.message
-      }),
-    });
+    setSubmitError('');
+    setIsSubmitting(true);
 
-    if (response.ok) {
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: '',
+    try {
+      const response = await fetch('https://formspree.io/f/xanjwbql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-      setTimeout(() => setSubmitSuccess(false), 5000);
-    } else {
-      const data = await response.json();
-      throw new Error(data?.error || 'Submission failed.');
+
+      if (response.ok) {
+        // Explicitly consume the response body as text instead of JSON
+        await response.text();
+        
+        setSubmitSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: '',
+        });
+
+        setTimeout(() => {
+          setSubmitSuccess(false);
+        }, 5000);
+      } else {
+        setSubmitError('Submission failed. Please email us directly or try again later.');
+      }
+    } catch (error) {
+      setSubmitError('Submission failed. Please email us directly or try again later.');
+      console.error('Form error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    setSubmitError('Submission failed. Please email us directly or try again later.');
-    console.error('Form error:', error);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
+
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-lg shadow-lg">
       <h3 className="text-2xl font-bold mb-6 text-center text-crimson-900">Get a Free Quote</h3>
-      
+
       {submitSuccess && (
         <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-md text-center">
           Thank you for your message! We'll get back to you soon.
@@ -119,7 +114,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           {submitError}
         </div>
       )}
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
@@ -136,7 +131,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           />
           {formErrors.name && <p className="mt-1 text-red-500 text-sm">{formErrors.name}</p>}
         </div>
-        
+
         <div>
           <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
             Email Address*
@@ -152,7 +147,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           />
           {formErrors.email && <p className="mt-1 text-red-500 text-sm">{formErrors.email}</p>}
         </div>
-        
+
         <div>
           <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
             Phone Number
@@ -168,7 +163,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           />
           {formErrors.phone && <p className="mt-1 text-red-500 text-sm">{formErrors.phone}</p>}
         </div>
-        
+
         <div>
           <label htmlFor="service" className="block text-gray-700 font-medium mb-2">
             Service Needed
@@ -191,7 +186,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </select>
         </div>
       </div>
-      
+
       <div className="mt-6">
         <label htmlFor="message" className="block text-gray-700 font-medium mb-2">
           Message
@@ -206,7 +201,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           placeholder="Please provide any additional details about your service needs..."
         ></textarea>
       </div>
-      
+
       <div className="mt-6">
         <Button
           type="submit"
@@ -218,7 +213,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           {isSubmitting ? 'Sending...' : 'Get Your Free Quote'}
         </Button>
       </div>
-      
+
       <p className="mt-4 text-sm text-gray-500 text-center">
         We'll get back to you within 24 hours.
       </p>
