@@ -66,12 +66,20 @@ const ContactForm: React.FC = () => {
     
     setIsSubmitting(true);
     setSubmitError(null);
-
+    
     try {
-      // For now, we'll simulate a successful submission
-      // In production, this would send the data to your backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      const response = await fetch('https://formspree.io/f/xanjwbql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+
       setSubmitSuccess(true);
       setFormData({
         name: '',
