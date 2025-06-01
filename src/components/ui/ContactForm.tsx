@@ -18,7 +18,7 @@ const ContactForm: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -26,10 +26,11 @@ const ContactForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
+    // Clear error when user types
     if (formErrors[name as keyof typeof formErrors]) {
       setFormErrors((prev) => ({ ...prev, [name]: '' }));
     }
-    setSubmitError('');
+    setSubmitError(null);
   };
 
   const validateForm = () => {
@@ -62,20 +63,20 @@ const ContactForm: React.FC = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    setSubmitError('');
+    setSubmitError(null);
     setIsSubmitting(true);
 
     try {
       const response = await fetch('https://formspree.io/f/xanjwbql', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: new URLSearchParams(formData as any).toString(),
       });
 
       if (response.ok) {
-        // Explicitly consume the response body as text instead of JSON
-        await response.text();
-        
         setSubmitSuccess(true);
         setFormData({
           name: '',
@@ -89,11 +90,11 @@ const ContactForm: React.FC = () => {
           setSubmitSuccess(false);
         }, 5000);
       } else {
-        setSubmitError('Submission failed. Please email us directly or try again later.');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
       setSubmitError('Submission failed. Please email us directly or try again later.');
-      console.error('Form error:', error);
+      console.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -126,10 +127,14 @@ const ContactForm: React.FC = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-md border ${formErrors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
+            className={`w-full px-4 py-3 rounded-md border ${
+              formErrors.name ? 'border-red-500' : 'border-gray-300'
+            } focus:outline-none focus:ring-2 focus:ring-crimson-500`}
             placeholder="Your name"
           />
-          {formErrors.name && <p className="mt-1 text-red-500 text-sm">{formErrors.name}</p>}
+          {formErrors.name && (
+            <p className="mt-1 text-red-500 text-sm">{formErrors.name}</p>
+          )}
         </div>
 
         <div>
@@ -142,10 +147,14 @@ const ContactForm: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-md border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
+            className={`w-full px-4 py-3 rounded-md border ${
+              formErrors.email ? 'border-red-500' : 'border-gray-300'
+            } focus:outline-none focus:ring-2 focus:ring-crimson-500`}
             placeholder="Your email"
           />
-          {formErrors.email && <p className="mt-1 text-red-500 text-sm">{formErrors.email}</p>}
+          {formErrors.email && (
+            <p className="mt-1 text-red-500 text-sm">{formErrors.email}</p>
+          )}
         </div>
 
         <div>
@@ -158,10 +167,14 @@ const ContactForm: React.FC = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-md border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
+            className={`w-full px-4 py-3 rounded-md border ${
+              formErrors.phone ? 'border-red-500' : 'border-gray-300'
+            } focus:outline-none focus:ring-2 focus:ring-crimson-500`}
             placeholder="(405) 293-5872"
           />
-          {formErrors.phone && <p className="mt-1 text-red-500 text-sm">{formErrors.phone}</p>}
+          {formErrors.phone && (
+            <p className="mt-1 text-red-500 text-sm">{formErrors.phone}</p>
+          )}
         </div>
 
         <div>
