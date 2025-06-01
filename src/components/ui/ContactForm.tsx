@@ -25,8 +25,7 @@ const ContactForm: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
-    // Clear error when user types
+
     if (formErrors[name as keyof typeof formErrors]) {
       setFormErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -58,48 +57,53 @@ const ContactForm: React.FC = () => {
     setFormErrors(newErrors);
     return valid;
   };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setSubmitError('');
+  setIsSubmitting(true);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError('');
-    setIsSubmitting(true);
+  if (!validateForm()) {
+    setIsSubmitting(false);
+    return;
+  }
 
-    try {
-      const response = await fetch('https://formspree.io/f/xanjwbql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData as any).toString()
+  try {
+    const response = await fetch('https://formspree.io/f/xanjwbql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        service: formData.service,
+        message: formData.message
+      }),
+    });
+
+    if (response.ok) {
+      setSubmitSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        message: '',
       });
-
-      if (response.ok) {
-        const contentType = response.headers.get('content-type');
-        if (contentType?.includes('application/json')) {
-          await response.json();
-        }
-        setSubmitSuccess(true);
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          service: '',
-          message: '',
-        });
-        
-        // Reset success message after 5 seconds
-        setTimeout(() => {
-          setSubmitSuccess(false);
-        }, 5000);
-      } else {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-    } catch (error) {
-      setSubmitError('Submission failed. Please email us directly or try again later.');
-      console.error('Form error:', error);
-    } finally {
-      setIsSubmitting(false);
+      setTimeout(() => setSubmitSuccess(false), 5000);
+    } else {
+      const data = await response.json();
+      throw new Error(data?.error || 'Submission failed.');
     }
-  };
-
+  } catch (error) {
+    setSubmitError('Submission failed. Please email us directly or try again later.');
+    console.error('Form error:', error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-lg shadow-lg">
       <h3 className="text-2xl font-bold mb-6 text-center text-crimson-900">Get a Free Quote</h3>
