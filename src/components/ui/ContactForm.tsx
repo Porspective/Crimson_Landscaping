@@ -66,36 +66,36 @@ const ContactForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://formspree.io/f/xanjwbql', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(formData)
+      const formPayload = new URLSearchParams();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) formPayload.append(key, value);
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        if (result.ok) {
-          setSubmitSuccess(true);
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            service: '',
-            message: '',
-          });
+      const response = await fetch('https://formspree.io/f/xanjwbql', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formPayload
+      });
 
-          setTimeout(() => {
-            setSubmitSuccess(false);
-          }, 5000);
-        } else {
-          throw new Error('Form submission failed');
-        }
-      } else {
-        throw new Error('Form submission failed');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const contentType = response.headers.get('content-type');
+      if (contentType?.includes('application/json')) {
+        await response.json();
+      }
+
+      setSubmitSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        message: '',
+      });
+
+      setTimeout(() => setSubmitSuccess(false), 5000);
     } catch (error) {
       setSubmitError('Submission failed. Please email us directly or try again later.');
       console.error('Form submission error:', error);
