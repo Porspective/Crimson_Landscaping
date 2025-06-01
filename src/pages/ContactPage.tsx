@@ -162,9 +162,9 @@ const ContactPage: React.FC = () => {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-3 text-crimson-900">What about insurance?</h3>
+              <h3 className="text-xl font-bold mb-3 text-crimson-900">Do you have insurance?</h3>
               <p className="text-gray-700">
-                We are currently in the process of obtaining our insurance coverage to better serve and protect our customers.
+                Yes, we maintain comprehensive business insurance coverage to protect both our customers and our team. This includes general liability insurance for your peace of mind.
               </p>
             </div>
           </div>
