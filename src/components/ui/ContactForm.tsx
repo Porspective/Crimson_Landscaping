@@ -62,9 +62,6 @@ const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError('');
-    
-    if (!validateForm()) return;
-    
     setIsSubmitting(true);
 
     try {
@@ -75,7 +72,6 @@ const ContactForm: React.FC = () => {
       });
 
       if (response.ok) {
-        // Success - don't parse JSON unless content-type matches
         const contentType = response.headers.get('content-type');
         if (contentType?.includes('application/json')) {
           await response.json();
