@@ -31,7 +31,7 @@ const WhyChooseUs: React.FC = () => {
         <div className="section-title">
           <h2>Why Choose Us</h2>
           <p>
-            At Crimson Clean Co, we're committed to providing exceptional service and 
+            At Crimson Landscaping, we're committed to providing exceptional service and 
             outstanding results for every client.
           </p>
         </div>
