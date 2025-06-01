@@ -13,10 +13,10 @@ function App() {
 
   useEffect(() => {
     // Handle redirect from Formspree
-    if (sessionStorage.redirect) {
-      const redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
-      if (redirect && redirect !== location.pathname) {
+    const redirect = sessionStorage.getItem('redirect');
+    if (redirect) {
+      sessionStorage.removeItem('redirect');
+      if (redirect !== location.pathname) {
         window.history.replaceState(null, '', redirect);
       }
     }
