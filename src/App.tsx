@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
@@ -13,10 +12,10 @@ function App() {
 
   useEffect(() => {
     // Handle redirect from Formspree
-    const redirect = sessionStorage.getItem('redirect');
-    if (redirect) {
-      sessionStorage.removeItem('redirect');
-      if (redirect !== location.pathname) {
+    if (sessionStorage.redirect) {
+      const redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.pathname) {
         window.history.replaceState(null, '', redirect);
       }
     }
@@ -36,5 +35,3 @@ function App() {
     </Routes>
   );
 }
-
-export default App;
