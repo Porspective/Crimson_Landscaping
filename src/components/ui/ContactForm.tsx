@@ -3,7 +3,7 @@ import Button from './Button';
 
 const ContactForm = () => (
   <form 
-    action="https://formspree.io/f/xanjwbql"
+    action="https://formspree.io/f/xovwqagd"
     method="POST"
     className="bg-white p-6 md:p-8 rounded-lg shadow-lg"
   >
