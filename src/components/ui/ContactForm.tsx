@@ -161,7 +161,7 @@ const ContactForm: React.FC = () => {
             value={formData.phone}
             onChange={handleChange}
             className={`w-full px-4 py-3 rounded-md border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
-            placeholder="(405) 555-1234"
+            placeholder="(405) 293-5872"
           />
           {formErrors.phone && <p className="mt-1 text-red-500 text-sm">{formErrors.phone}</p>}
         </div>
