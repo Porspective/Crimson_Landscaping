@@ -78,8 +78,15 @@ const ContactForm: React.FC = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to submit form');
+        let errorMessage: string;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || 'Failed to submit form';
+        } catch (jsonError) {
+          // If response is not JSON, use status text or generic message
+          errorMessage = response.statusText || 'Failed to submit form';
+        }
+        throw new Error(errorMessage);
       }
 
       setSubmitSuccess(true);
