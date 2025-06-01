@@ -69,14 +69,12 @@ const ContactForm: React.FC = () => {
     try {
       const response = await fetch('https://formspree.io/f/xanjwbql', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Accept: 'application/json',
-        },
-        body: new URLSearchParams(formData as any).toString(),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
+        await response.text(); // safely reads empty or plain text response
         setSubmitSuccess(true);
         setFormData({
           name: '',
