@@ -61,42 +61,44 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError('');
     
     if (!validateForm()) return;
     
     setIsSubmitting(true);
-    setSubmitError(null);
-    
+
     try {
       const response = await fetch('https://formspree.io/f/xanjwbql', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString()
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit form');
+      if (response.ok) {
+        // Success - don't parse JSON unless content-type matches
+        const contentType = response.headers.get('content-type');
+        if (contentType?.includes('application/json')) {
+          await response.json();
+        }
+        setSubmitSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: '',
+        });
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setSubmitSuccess(false);
+        }, 5000);
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: '',
-      });
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
     } catch (error) {
-      console.error('Form submission error:', error);
-      setSubmitError('Failed to submit form. Please try again later.');
+      setSubmitError('Submission failed. Please email us directly or try again later.');
+      console.error('Form error:', error);
     } finally {
       setIsSubmitting(false);
     }
