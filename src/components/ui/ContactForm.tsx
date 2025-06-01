@@ -26,7 +26,6 @@ const ContactForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error when user types
     if (formErrors[name as keyof typeof formErrors]) {
       setFormErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -69,26 +68,33 @@ const ContactForm: React.FC = () => {
     try {
       const response = await fetch('https://formspree.io/f/xanjwbql', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
       });
 
       if (response.ok) {
-        await response.text(); // safely reads empty or plain text response
-        setSubmitSuccess(true);
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          service: '',
-          message: '',
-        });
+        const result = await response.json();
+        if (result.ok) {
+          setSubmitSuccess(true);
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            service: '',
+            message: '',
+          });
 
-        setTimeout(() => {
-          setSubmitSuccess(false);
-        }, 5000);
+          setTimeout(() => {
+            setSubmitSuccess(false);
+          }, 5000);
+        } else {
+          throw new Error('Form submission failed');
+        }
       } else {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('Form submission failed');
       }
     } catch (error) {
       setSubmitError('Submission failed. Please email us directly or try again later.');
@@ -125,14 +131,10 @@ const ContactForm: React.FC = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-md border ${
-              formErrors.name ? 'border-red-500' : 'border-gray-300'
-            } focus:outline-none focus:ring-2 focus:ring-crimson-500`}
+            className={`w-full px-4 py-3 rounded-md border ${formErrors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
             placeholder="Your name"
           />
-          {formErrors.name && (
-            <p className="mt-1 text-red-500 text-sm">{formErrors.name}</p>
-          )}
+          {formErrors.name && <p className="mt-1 text-red-500 text-sm">{formErrors.name}</p>}
         </div>
 
         <div>
@@ -145,14 +147,10 @@ const ContactForm: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-md border ${
-              formErrors.email ? 'border-red-500' : 'border-gray-300'
-            } focus:outline-none focus:ring-2 focus:ring-crimson-500`}
+            className={`w-full px-4 py-3 rounded-md border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
             placeholder="Your email"
           />
-          {formErrors.email && (
-            <p className="mt-1 text-red-500 text-sm">{formErrors.email}</p>
-          )}
+          {formErrors.email && <p className="mt-1 text-red-500 text-sm">{formErrors.email}</p>}
         </div>
 
         <div>
@@ -165,14 +163,10 @@ const ContactForm: React.FC = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-md border ${
-              formErrors.phone ? 'border-red-500' : 'border-gray-300'
-            } focus:outline-none focus:ring-2 focus:ring-crimson-500`}
+            className={`w-full px-4 py-3 rounded-md border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-crimson-500`}
             placeholder="(405) 293-5872"
           />
-          {formErrors.phone && (
-            <p className="mt-1 text-red-500 text-sm">{formErrors.phone}</p>
-          )}
+          {formErrors.phone && <p className="mt-1 text-red-500 text-sm">{formErrors.phone}</p>}
         </div>
 
         <div>
