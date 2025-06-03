@@ -21,10 +21,19 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
     return true;
   };
 
-  const handlePaymentClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handlePaymentClick = (e: React.MouseEvent<HTMLAnchorElement>, type: 'paypal' | 'venmo' | 'stripe') => {
     if (!validateAmount()) {
       e.preventDefault();
       return;
+    }
+
+    const numAmount = parseFloat(amount);
+    if (type === 'paypal') {
+      e.currentTarget.href = `https://paypal.me/CrimsonLandscapingCo/${numAmount}`;
+    } else if (type === 'venmo') {
+      e.currentTarget.href = `https://venmo.com/Crimson-Landscaping?txn=pay&amount=${numAmount}`;
+    } else if (type === 'stripe') {
+      e.currentTarget.href = 'https://buy.stripe.com/test_6oUaEX4zDdyx9009p17kc00';
     }
   };
 
@@ -61,19 +70,41 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             <a 
-              href="https://buy.stripe.com/test_00g5kz0Xs5mS8WQ7ss"
+              href="https://buy.stripe.com/test_6oUaEX4zDdyx9009p17kc00"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handlePaymentClick}
-              className="btn-primary w-full flex items-center justify-center py-3"
+              onClick={(e) => handlePaymentClick(e, 'stripe')}
+              className="flex items-center justify-center w-full p-4 bg-[#635BFF] text-white rounded-md hover:bg-[#4B45C6] transition-colors"
             >
               <CreditCard className="h-5 w-5 mr-2" />
               Pay with Stripe
             </a>
+
+            <a 
+              href="https://paypal.me/CrimsonLandscapingCo"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => handlePaymentClick(e, 'paypal')}
+              className="flex items-center justify-center w-full p-4 bg-[#0070BA] text-white rounded-md hover:bg-[#005ea6] transition-colors"
+            >
+              <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-mark-color.svg" alt="PayPal" className="h-6 mr-2" />
+              Pay with PayPal
+            </a>
+
+            <a 
+              href="https://venmo.com/Crimson-Landscaping"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => handlePaymentClick(e, 'venmo')}
+              className="flex items-center justify-center w-full p-4 bg-[#3D95CE] text-white rounded-md hover:bg-[#3684b5] transition-colors"
+            >
+              <CreditCard className="h-5 w-5 mr-2" />
+              Pay with Venmo
+            </a>
           </div>
           
           <p className="mt-4 text-sm text-gray-600 text-center">
-            Secure payment processing by Stripe
+            Choose your preferred payment method
           </p>
           
           <Dialog.Close asChild>
