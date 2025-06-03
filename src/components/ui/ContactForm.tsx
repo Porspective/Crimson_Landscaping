@@ -72,13 +72,21 @@ const ContactForm: React.FC = () => {
       const response = await fetch('https://formspree.io/f/xovwqagd', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: new URLSearchParams(formData as any).toString(),
+        body: JSON.stringify(formData)
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        throw new Error(`Submission failed: ${response.status}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (contentType?.includes('application/json')) {
+        await response.json();
+      } else {
+        await response.text();
       }
 
       setSubmitSuccess(true);
