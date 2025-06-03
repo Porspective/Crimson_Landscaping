@@ -9,7 +9,7 @@ const Services: React.FC = () => {
       title: 'Lawn Mowing',
       description: 'Keep your lawn looking perfectly manicured with our professional mowing service.',
       icon: <Wind className="h-5 w-5" />,
-      imageUrl: './before2.jpeg'
+      imageUrl: './after2.jpeg'
     },
     {
       title: 'House Washing',
