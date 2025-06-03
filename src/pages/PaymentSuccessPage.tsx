@@ -9,9 +9,9 @@ const PaymentSuccessPage: React.FC = () => {
         <div className="text-green-500 mb-4">
           <CheckCircle className="h-16 w-16 mx-auto" />
         </div>
-        <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
+        <h1 className="text-2xl font-bold mb-4">Thank You!</h1>
         <p className="text-gray-600 mb-6">
-          Thank you for your payment. We'll process your request and contact you shortly with further details.
+          We've received your request and will contact you within 24 hours.
         </p>
         <Link
           to="/"

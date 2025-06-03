@@ -13,8 +13,8 @@ const ResultsShowcase: React.FC = () => {
     },
     {
       title: 'Lawn Mowing',
-      beforeImage: './assets/before2.jpg',
-      afterImage: './assets/after2.jpg'
+      beforeImage: './before2.jpeg',
+      afterImage: './after2.jpeg'
     }
   ];
 
