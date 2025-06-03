@@ -22,12 +22,18 @@ const ContactForm: React.FC = () => {
         }
       });
 
-      if (response.ok) {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.ok) {
         navigate('/thank-you');
       } else {
-        throw new Error('Failed to submit form');
+        throw new Error('Form submission failed');
       }
     } catch (err) {
+      console.error('Form submission error:', err);
       setError('Failed to submit form. Please try again.');
     } finally {
       setIsSubmitting(false);
