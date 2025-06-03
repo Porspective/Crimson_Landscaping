@@ -1,60 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 
 const ContactForm: React.FC = () => {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!validateForm()) return;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
 
-  setIsSubmitting(true);
-  setSubmitError(null);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const response = await fetch('https://formspree.io/f/xanjwbql', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
 
-  try {
-    const response = await fetch('https://formspree.io/f/yourFormID', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Formspree error: ${response.status}`);
+      if (response.ok) {
+        navigate('/thank-you');
+      } else {
+        throw new Error('Failed to submit form');
+      }
+    } catch (err) {
+      setError('Failed to submit form. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      const data = await response.json();
-      // Handle the JSON response as needed
-    } else {
-      const text = await response.text();
-      // Handle non-JSON response or ignore
-    }
-
-    setSubmitSuccess(true);
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      service: '',
-      message: '',
-    });
-
-    setTimeout(() => {
-      setSubmitSuccess(false);
-    }, 5000);
-  } catch (error) {
-    console.error('Form submission error:', error);
-    setSubmitError('Submission failed. Please email us directly or try again later.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   return (
     <form 
